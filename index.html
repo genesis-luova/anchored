@@ -365,6 +365,33 @@
   .stmt:hover .res b{color:var(--gold-bright)}
   .big-stmt{font-family:var(--serif);text-align:center;font-size:clamp(2rem,5.2vw,3.8rem);line-height:1.08;margin:clamp(3.6rem,7vw,5.6rem) auto 0;max-width:18ch;color:var(--ink);letter-spacing:-.015em}
   .big-stmt em{font-style:italic;color:var(--gold)}
+
+  /* ================= ULTIMATE DESIGN UPDATE (v12) ================= */
+  /* subtle global film grain for premium texture */
+  body::after{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.05;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:220px}
+
+  /* animated ambient gradient orbs behind light & accent sections */
+  #about::before,#anchors::before,.believe::before,#contact::before{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(38% 46% at 12% 18%,rgba(213,180,112,.13),transparent 70%),radial-gradient(34% 42% at 88% 26%,rgba(151,171,137,.16),transparent 70%),radial-gradient(46% 54% at 70% 92%,rgba(213,180,112,.09),transparent 72%);animation:ambdrift 34s ease-in-out infinite alternate}
+  .section--sage{position:relative}
+  .section--sage::before{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(40% 48% at 86% 14%,rgba(1,50,32,.10),transparent 70%),radial-gradient(38% 46% at 10% 86%,rgba(213,180,112,.15),transparent 72%);animation:ambdrift 38s ease-in-out infinite alternate}
+  .section--ever{position:relative}
+  .section--ever::before{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(40% 50% at 18% 22%,rgba(213,180,112,.17),transparent 68%),radial-gradient(36% 46% at 82% 78%,rgba(151,171,137,.15),transparent 70%);animation:ambdrift 32s ease-in-out infinite alternate}
+  @keyframes ambdrift{from{transform:scale(1) translate(0,0)}to{transform:scale(1.14) translate(2.5%,-2.5%)}}
+
+  /* shimmer on the big manifesto + reinforce hero shimmer */
+  .big-stmt em{background:linear-gradient(100deg,var(--gold) 30%,#fff6e0 50%,var(--gold) 70%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:shine 6s linear infinite}
+
+  /* cursor spotlight glow */
+  .spotlight{position:fixed;top:0;left:0;width:560px;height:560px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(232,200,120,.11),rgba(232,200,120,.04) 42%,transparent 66%);pointer-events:none;z-index:60;opacity:0;transition:opacity .5s;will-change:left,top}
+
+  /* scroll-to-top */
+  .totop{position:fixed;right:1.5rem;bottom:1.5rem;z-index:80;width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:var(--navy);display:grid;place-items:center;box-shadow:0 16px 36px -12px rgba(213,180,112,.75);opacity:0;transform:translateY(20px) scale(.85);transition:opacity .4s,transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s;pointer-events:none}
+  .totop.show{opacity:1;transform:none;pointer-events:auto}
+  .totop:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 22px 48px -12px rgba(213,180,112,.95)}
+  .btn-gold{will-change:transform}
+
+  @media(prefers-reduced-motion:reduce){#about::before,#anchors::before,.believe::before,#contact::before,.section--sage::before,.section--ever::before,.big-stmt em{animation:none}body::after{display:none}}
+  @media(max-width:760px){.spotlight{display:none}body::after{display:none}.totop{right:1rem;bottom:1rem;width:44px;height:44px}}
 </style>
 </head>
 <body id="top">
@@ -757,6 +784,26 @@
 
   const headIO=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const el=e.target;if(getComputedStyle(el).textAlign==='center')el.classList.add('cu');el.classList.add('drawn');headIO.unobserve(el);}})},{threshold:0.55});
   document.querySelectorAll('h2.head').forEach(el=>headIO.observe(el));
+
+  /* ===== ultimate effects (v12) ===== */
+  (function(){
+    const t=document.createElement('button');t.className='totop';t.setAttribute('aria-label','Back to top');
+    t.innerHTML='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+    document.body.appendChild(t);
+    t.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+    window.addEventListener('scroll',()=>{t.classList.toggle('show',window.scrollY>700);},{passive:true});
+  })();
+  if(!reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    const sp=document.createElement('div');sp.className='spotlight';document.body.appendChild(sp);
+    let sx=innerWidth/2,sy=innerHeight/2,tx=sx,ty=sy,raf=false;
+    const tick=()=>{sx+=(tx-sx)*0.16;sy+=(ty-sy)*0.16;sp.style.left=sx+'px';sp.style.top=sy+'px';if(Math.abs(tx-sx)>0.4||Math.abs(ty-sy)>0.4){requestAnimationFrame(tick);}else{raf=false;}};
+    window.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;sp.style.opacity='1';if(!raf){raf=true;requestAnimationFrame(tick);}});
+    document.addEventListener('mouseleave',()=>{sp.style.opacity='0';});
+    document.querySelectorAll('.btn-gold').forEach(b=>{
+      b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();const mx=e.clientX-(r.left+r.width/2),my=e.clientY-(r.top+r.height/2);b.style.transform='translate('+(mx*0.16).toFixed(1)+'px,'+(my*0.26).toFixed(1)+'px)';});
+      b.addEventListener('pointerleave',()=>{b.style.transform='';});
+    });
+  }
 </script>
 </body>
 </html>
