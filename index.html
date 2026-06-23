@@ -121,16 +121,16 @@
   .hero .scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(4,1,54,.52) 0%,rgba(4,1,54,.12) 22%,rgba(4,1,54,.42) 58%,rgba(4,1,54,.92) 100%)}
   .hero .routes-fx{top:-6%;right:-6%;width:min(620px,52%);opacity:.5;z-index:3;animation:drift 26s ease-in-out infinite alternate}
   @keyframes drift{from{transform:translate(0,0)}to{transform:translate(-22px,16px)}}
-  .hero-inner{position:relative;z-index:4;padding-bottom:clamp(3.5rem,7vw,6rem);padding-top:8rem;width:100%}
+  .hero-inner{position:relative;z-index:4;padding-bottom:clamp(4.5rem,8vw,7.5rem);padding-top:9rem}
   .rotator-line{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--serif);font-size:clamp(1.1rem,2vw,1.5rem);color:var(--gold-soft);margin-bottom:.4rem;opacity:0;animation:rise .9s .15s forwards}
   .rotator{position:relative;display:inline-block;min-width:8.5ch;height:1.4em;overflow:hidden;vertical-align:bottom}
   .rotator span{position:absolute;left:0;top:0;width:100%;font-style:italic;color:var(--gold);opacity:0;transform:translateY(100%);transition:opacity .5s,transform .5s}
   .rotator span.on{opacity:1;transform:translateY(0)}
   .rotator span.off{opacity:0;transform:translateY(-100%)}
-  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(3rem,7.8vw,6.4rem);line-height:.98;letter-spacing:-.02em;margin:.4rem 0 1.4rem;max-width:16ch;text-shadow:0 4px 30px rgba(4,1,54,.4);opacity:0;animation:rise 1s .3s forwards}
+  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(3rem,7.8vw,6.4rem);line-height:.98;letter-spacing:-.02em;margin:.6rem 0 1.7rem;max-width:17ch;text-shadow:0 4px 30px rgba(4,1,54,.4);opacity:0;animation:rise 1s .3s forwards}
   .hero h1 em{font-style:italic;color:var(--gold-soft)}
   .hero p.sub{font-size:clamp(1.05rem,1.6vw,1.35rem);color:var(--on-dark);opacity:0;max-width:46ch;font-weight:300;animation:rise 1s .5s forwards;text-shadow:0 2px 18px rgba(4,1,54,.55)}
-  .hero .cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;opacity:0;animation:rise 1s .66s forwards}
+  .hero .cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.4rem;opacity:0;animation:rise 1s .66s forwards}
   @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
   .slide-dots{position:absolute;left:50%;bottom:1.6rem;transform:translateX(-50%);z-index:4;display:flex;gap:.6rem}
   .slide-dots button{width:9px;height:9px;border-radius:50%;border:none;background:rgba(246,242,232,.4);cursor:pointer;transition:all .3s;padding:0}
@@ -337,6 +337,22 @@
   .split-media .scene{will-change:transform}
   .avatar{overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}
   @media(prefers-reduced-motion:reduce){.hero h1 em{animation:none}.scene.clip .scene-photo{clip-path:none}}
+
+  /* === ISB aesthetic polish (v10) === */
+  section[id]{scroll-margin-top:96px}
+  h2.head{position:relative}
+  h2.head::after{content:"";position:absolute;left:0;bottom:-.2em;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-soft));border-radius:3px;transition:width 1.1s cubic-bezier(.2,.8,.2,1) .15s}
+  h2.head.cu::after{left:50%;transform:translateX(-50%)}
+  h2.head.drawn::after{width:2.6rem}
+  .focus:hover{box-shadow:0 46px 92px -44px rgba(4,1,54,.55)}
+  .jr:hover{box-shadow:0 42px 84px -40px rgba(4,1,54,.46)}
+  .loc:hover{box-shadow:0 34px 70px -38px rgba(4,1,54,.4)}
+  .testi:hover{box-shadow:0 36px 78px -42px rgba(0,0,0,.5)}
+  .split-media .scene{box-shadow:0 44px 96px -48px rgba(4,1,54,.6)}
+  .focus-head,.jr-head,.stories-head{margin-bottom:clamp(3.4rem,6vw,4.8rem)}
+  .lede{line-height:1.62}
+  .btn{letter-spacing:.012em}
+  @media(prefers-reduced-motion:reduce){h2.head::after{transition:none;width:2.6rem}}
 </style>
 </head>
 <body id="top">
@@ -726,6 +742,9 @@
     });
   }
   if(!reduce){const sm=document.querySelector('.split-media .scene');if(sm){let tk=false;window.addEventListener('scroll',()=>{if(!tk){requestAnimationFrame(()=>{const r=sm.getBoundingClientRect();const off=(r.top+r.height/2-innerHeight/2)/innerHeight;sm.style.transform='translateY('+(off*-16).toFixed(1)+'px)';tk=false;});tk=true;}},{passive:true});}}
+
+  const headIO=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const el=e.target;if(getComputedStyle(el).textAlign==='center')el.classList.add('cu');el.classList.add('drawn');headIO.unobserve(el);}})},{threshold:0.55});
+  document.querySelectorAll('h2.head').forEach(el=>headIO.observe(el));
 </script>
 </body>
 </html>
