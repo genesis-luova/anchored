@@ -496,6 +496,48 @@ p,.lede,.sub,.desc,.laddr{text-wrap:pretty}
   html{scroll-behavior:auto}
   .jr:hover .scene-photo,.jr:hover .blogo{transform:none}
 }
+
+/* ===================== BACKGROUND & TRANSITION POLISH ===================== */
+
+/* --- Rotator clip fix: an invisible sizer sets the box to the widest word --- */
+.rotator{min-width:0}
+.rotator-line{flex-wrap:wrap}
+.rotator::before{content:"flourishing.";display:inline-block;font-style:italic;visibility:hidden;white-space:nowrap}
+.rotator span{white-space:nowrap}
+
+/* --- Richer ambient orbs on light/accent sections (more presence + a 4th orb) --- */
+#about::before,#anchors::before,.believe::before,#contact::before{
+  background:
+    radial-gradient(34% 42% at 10% 16%,rgba(213,180,112,.17),transparent 68%),
+    radial-gradient(32% 40% at 90% 22%,rgba(151,171,137,.20),transparent 70%),
+    radial-gradient(46% 54% at 74% 94%,rgba(213,180,112,.12),transparent 72%),
+    radial-gradient(30% 38% at 26% 82%,rgba(111,138,97,.12),transparent 74%)}
+
+/* --- Ambient on the values strip (was plain) --- */
+.values{position:relative;overflow:hidden}
+.values::before{content:"";position:absolute;inset:-30%;z-index:0;pointer-events:none;
+  background:radial-gradient(42% 64% at 16% 30%,rgba(213,180,112,.14),transparent 70%),
+            radial-gradient(40% 56% at 84% 66%,rgba(151,171,137,.16),transparent 72%);
+  animation:ambdrift 40s ease-in-out infinite alternate}
+
+/* --- Fine film grain on light sections for tactile richness --- */
+.values::after,#about::after,#anchors::after,.believe::after,#contact::after,
+.section--sage::after,.section--ever::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.55;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:230px 230px}
+
+/* --- Subtle layered-panel depth: faint inset top shadow on light sections --- */
+.values,#about,#anchors,.believe,#contact,.section--sage,.section--ever{
+  box-shadow:inset 0 16px 26px -22px rgba(4,1,54,.16)}
+
+/* --- TRANSITION: gold "horizon" seam at the top of dark sections + base shading --- */
+.section--navy::before,.final::before{content:"";position:absolute;inset:0 0 auto 0;height:170px;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(213,180,112,.13) 0,rgba(213,180,112,0) 56%);
+  box-shadow:inset 0 1px 0 rgba(213,180,112,.24)}
+.section--navy::after,.final::after{content:"";position:absolute;inset:auto 0 0 0;height:150px;z-index:2;pointer-events:none;
+  background:linear-gradient(0deg,rgba(0,0,0,.24),transparent)}
+
+@media(prefers-reduced-motion:reduce){.values::before{animation:none}}
 </style>
 </head>
 <body id="top">
