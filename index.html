@@ -698,15 +698,38 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
 @media(max-width:860px){.steps-grid{grid-template-columns:1fr}.xform{grid-template-columns:1fr;gap:.5rem}}
 
 /* About Us — pillars */
-.pillars-grid{margin-top:3rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
-.pillars-grid .pillar:nth-child(4),.pillars-grid .pillar:nth-child(5){grid-column:span 1}
-.pillar{position:relative;background:var(--card);border:1px solid rgba(4,1,54,.07);border-radius:16px;padding:1.8rem 1.6rem;
-  box-shadow:0 22px 48px -34px rgba(4,1,54,.4)}
-.pillar::before{content:"";position:absolute;left:1.6rem;top:1.7rem;width:26px;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+/* ===== Pillars carousel ===== */
+.pcar{margin-top:clamp(2.4rem,5vw,3.4rem);position:relative}
+.pcar-viewport{overflow:hidden;padding:.85rem .4rem;-webkit-mask-image:linear-gradient(90deg,transparent,#000 2.6%,#000 97.4%,transparent);mask-image:linear-gradient(90deg,transparent,#000 2.6%,#000 97.4%,transparent)}
+.pcar-track{--vis:3.15;--gap:1.3rem;display:flex;align-items:stretch;gap:var(--gap);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;cursor:grab}
+.pcar-track::-webkit-scrollbar{display:none}
+.pcar-track.grabbing{cursor:grabbing;scroll-behavior:auto;scroll-snap-type:none}
+@media(max-width:1100px){.pcar-track{--vis:2.15}}
+@media(max-width:760px){.pcar-track{--vis:1.35}}
+@media(max-width:520px){.pcar-track{--vis:1.05}}
+
+.pillar{position:relative;flex:0 0 calc(100%/var(--vis) - var(--gap));scroll-snap-align:start;display:flex;flex-direction:column;background:var(--card);border:1px solid rgba(4,1,54,.07);border-radius:16px;padding:1.8rem 1.6rem;
+  box-shadow:0 22px 48px -34px rgba(4,1,54,.4);transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s cubic-bezier(.2,.8,.2,1),border-color .5s}
+.pillar:hover{transform:translateY(-6px);box-shadow:0 32px 60px -30px rgba(4,1,54,.5);border-color:rgba(213,180,112,.55)}
+.pillar::before{content:"";position:absolute;left:1.6rem;top:1.7rem;width:26px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.pillar:hover::before{width:46px}
 .pillar h3{font-family:var(--serif);font-style:italic;font-size:1.32rem;color:var(--navy);margin:1.1rem 0 .55rem;line-height:1.2}
 .pillar p{margin:0;color:#4a4763;font-size:.96rem;line-height:1.58}
-@media(max-width:900px){.pillars-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.pillars-grid{grid-template-columns:1fr}}
+
+.pcar-ui{display:flex;flex-direction:column;gap:1.05rem;margin-top:1.7rem}
+.pcar-progress{height:3px;border-radius:3px;background:rgba(4,1,54,.09);overflow:hidden}
+.pcar-bar{display:block;height:100%;width:33%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .45s cubic-bezier(.2,.8,.2,1),margin-left .45s cubic-bezier(.2,.8,.2,1)}
+.pcar-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.pcar-dots{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.pcar-dot{width:8px;height:8px;padding:0;border:none;border-radius:99px;background:rgba(4,1,54,.18);cursor:pointer;transition:width .4s cubic-bezier(.2,.8,.2,1),background .4s}
+.pcar-dot.is-active{width:26px;background:linear-gradient(90deg,var(--gold),var(--gold-bright))}
+.pcar-arrow{width:46px;height:46px;flex:0 0 auto;border-radius:50%;border:1px solid rgba(4,1,54,.14);background:var(--card);color:var(--navy);display:grid;place-items:center;cursor:pointer;box-shadow:0 12px 28px -16px rgba(4,1,54,.5);transition:transform .3s,background .3s,color .3s,border-color .3s,box-shadow .3s}
+.pcar-arrow svg{width:18px;height:18px}
+.pcar-arrow:hover:not(:disabled){background:var(--navy);color:var(--gold-bright);border-color:var(--navy);transform:translateY(-2px)}
+.pcar-arrow:active:not(:disabled){transform:scale(.93)}
+.pcar-arrow:disabled{opacity:.3;cursor:default;box-shadow:none}
+@media(max-width:520px){.pcar-arrow{width:42px;height:42px}}
+@media(prefers-reduced-motion:reduce){.pcar-track{scroll-behavior:auto}.pillar,.pillar::before,.pcar-bar,.pcar-dot,.pcar-arrow{transition:none}}
 
 /* On-map location cards */
 .map-cards{position:absolute;inset:0;z-index:5;pointer-events:none}
@@ -971,12 +994,24 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
       <h2 class="head" style="margin-top:1rem">Learning that shapes the whole child — and the <em>whole family.</em></h2>
       <p class="lede" style="margin:1.2rem auto 0;max-width:62ch">At AnchorEd, transformative learning experiences go beyond the pursuit of academic success. They shape the whole child — and ultimately, the whole family.</p>
     </div>
-    <div class="pillars-grid">
-      <div class="pillar reveal" data-d="40"><h3>Parent-Led Education</h3><p>Parents are the primary stewards of their children's learning and formation, and we empower them to intentionally live out that role — instead of merely outsourcing it.</p></div>
-      <div class="pillar reveal" data-d="100"><h3>Formation Before Information</h3><p>Education is not simply about what children know, but who they become. Character, values, faith, and wisdom are developed alongside knowledge and skills.</p></div>
-      <div class="pillar reveal" data-d="160"><h3>God's Design for the Family</h3><p>Families flourish when parents embrace their God-given role as primary stewards of their children's education and formation. Learning becomes more meaningful when home and education work together.</p></div>
-      <div class="pillar reveal" data-d="220"><h3>Future-Ready Excellence</h3><p>Children need more than academic achievement to thrive in a rapidly changing world. They need the knowledge, skills, adaptability, and character to navigate the future with confidence and purpose.</p></div>
-      <div class="pillar reveal" data-d="280"><h3>Legacy Building</h3><p>The impact of education and formation extends beyond one child, one school year, or one generation. Every intentional investment contributes to the values, relationships, and legacy a family passes on.</p></div>
+    <div class="pcar reveal" id="pillarCarousel" aria-roledescription="carousel" aria-label="What guides AnchorEd">
+      <div class="pcar-viewport">
+        <div class="pcar-track">
+          <div class="pillar"><h3>Parent-Led Education</h3><p>Parents are the primary stewards of their children's learning and formation, and we empower them to intentionally live out that role — instead of merely outsourcing it.</p></div>
+          <div class="pillar"><h3>Formation Before Information</h3><p>Education is not simply about what children know, but who they become. Character, values, faith, and wisdom are developed alongside knowledge and skills.</p></div>
+          <div class="pillar"><h3>God's Design for the Family</h3><p>Families flourish when parents embrace their God-given role as primary stewards of their children's education and formation. Learning becomes more meaningful when home and education work together.</p></div>
+          <div class="pillar"><h3>Future-Ready Excellence</h3><p>Children need more than academic achievement to thrive in a rapidly changing world. They need the knowledge, skills, adaptability, and character to navigate the future with confidence and purpose.</p></div>
+          <div class="pillar"><h3>Legacy Building</h3><p>The impact of education and formation extends beyond one child, one school year, or one generation. Every intentional investment contributes to the values, relationships, and legacy a family passes on.</p></div>
+        </div>
+      </div>
+      <div class="pcar-ui">
+        <div class="pcar-progress"><span class="pcar-bar"></span></div>
+        <div class="pcar-nav">
+          <button class="pcar-arrow" data-dir="prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="pcar-dots" role="tablist" aria-label="Choose item"></div>
+          <button class="pcar-arrow" data-dir="next" type="button" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1325,6 +1360,103 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
   setTimeout(function(){if(!opened&&teaser)teaser.classList.add('show');},3800);
 })();
 </script>
+<script>
+/* Pillars carousel controller */
+(function(){
+  var car=document.getElementById('pillarCarousel');
+  if(!car) return;
+  var track=car.querySelector('.pcar-track');
+  var cards=[].slice.call(track.querySelectorAll('.pillar'));
+  var dotsWrap=car.querySelector('.pcar-dots');
+  var prev=car.querySelector('[data-dir="prev"]');
+  var next=car.querySelector('[data-dir="next"]');
+  var bar=car.querySelector('.pcar-bar');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!track||!cards.length) return;
 
+  function step(){ return cards.length<2 ? track.clientWidth
+      : Math.round(cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left); }
+  function maxScroll(){ return Math.max(0, track.scrollWidth - track.clientWidth); }
+  function stops(){ var s=step()||1; return Math.max(1, Math.round(maxScroll()/s)+1); }
+  function indexFromScroll(){ var s=step()||1; return Math.max(0,Math.min(stops()-1,Math.round(track.scrollLeft/s))); }
+  function scrollToIndex(i){ i=Math.max(0,Math.min(stops()-1,i)); track.scrollTo({left:i*step(),behavior:reduce?'auto':'smooth'}); }
+
+  var dots=[];
+  function buildDots(){
+    var n=stops(); if(dots.length===n) return;
+    dotsWrap.innerHTML=''; dots=[];
+    for(var i=0;i<n;i++){ (function(idx){
+      var b=document.createElement('button');
+      b.className='pcar-dot'; b.type='button';
+      b.setAttribute('aria-label','Go to position '+(idx+1));
+      b.addEventListener('click',function(){ stopAuto(); scrollToIndex(idx); });
+      dotsWrap.appendChild(b); dots.push(b);
+    })(i); }
+  }
+
+  function update(){
+    buildDots();
+    var i=indexFromScroll(), sl=track.scrollLeft, ms=maxScroll();
+    dots.forEach(function(d,di){ d.classList.toggle('is-active',di===i); });
+    prev.disabled=sl<=2; next.disabled=sl>=ms-2;
+    var w=Math.min(100,Math.max(14,(track.clientWidth/track.scrollWidth)*100));
+    bar.style.width=w+'%';
+    bar.style.marginLeft=(ms>0 ? (sl/ms)*(100-w) : 0)+'%';
+  }
+
+  prev.addEventListener('click',function(){ stopAuto(); track.scrollBy({left:-step(),behavior:reduce?'auto':'smooth'}); });
+  next.addEventListener('click',function(){ stopAuto(); track.scrollBy({left:step(),behavior:reduce?'auto':'smooth'}); });
+
+  var raf; track.addEventListener('scroll',function(){ if(raf)return; raf=requestAnimationFrame(function(){ raf=0; update(); }); },{passive:true});
+  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(update,150); });
+
+  // drag-to-scroll (mouse/pen; touch uses native scroll)
+  var down=false,sx=0,ssl=0,moved=false;
+  track.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='touch')return;
+    down=true;moved=false;sx=e.clientX;ssl=track.scrollLeft;
+    track.classList.add('grabbing');
+    try{track.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  track.addEventListener('pointermove',function(e){
+    if(!down)return;
+    var dx=e.clientX-sx;
+    if(Math.abs(dx)>4){ moved=true; stopAuto(); }
+    track.scrollLeft=ssl-dx;
+  });
+  function endDrag(e){
+    if(!down)return; down=false;
+    track.classList.remove('grabbing');
+    try{track.releasePointerCapture(e.pointerId);}catch(_){}
+    scrollToIndex(indexFromScroll());
+  }
+  track.addEventListener('pointerup',endDrag);
+  track.addEventListener('pointercancel',endDrag);
+  track.addEventListener('click',function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); } },true);
+
+  car.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'){ e.preventDefault(); stopAuto(); scrollToIndex(indexFromScroll()+1); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); stopAuto(); scrollToIndex(indexFromScroll()-1); }
+  });
+
+  var timer=null, stopped=false;
+  function tick(){ if(track.scrollLeft>=maxScroll()-2) scrollToIndex(0); else track.scrollBy({left:step(),behavior:'smooth'}); }
+  function startAuto(){ if(reduce||stopped||timer)return; timer=setInterval(tick,5200); }
+  function pauseAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+  function stopAuto(){ stopped=true; pauseAuto(); }
+  car.addEventListener('pointerenter',pauseAuto);
+  car.addEventListener('pointerleave',function(){ if(!stopped) startAuto(); });
+  car.addEventListener('focusin',pauseAuto);
+  car.addEventListener('focusout',function(){ if(!stopped) startAuto(); });
+
+  if('IntersectionObserver' in window){
+    var vio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ if(!stopped) startAuto(); } else pauseAuto(); }); },{threshold:.3});
+    vio.observe(car);
+  } else startAuto();
+
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(update); else update();
+  setTimeout(update,300);
+})();
+</script>
 </body>
 </html>
