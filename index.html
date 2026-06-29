@@ -499,10 +499,9 @@ p,.lede,.sub,.desc,.laddr{text-wrap:pretty}
 
 /* ===================== BACKGROUND & TRANSITION POLISH ===================== */
 
-/* --- Rotator clip fix: an invisible sizer sets the box to the widest word --- */
-.rotator{min-width:0}
+/* --- Rotator: box width tracks the ACTIVE word so trailing text stays flush --- */
+.rotator{min-width:0;width:var(--rw,8.5ch);transition:width .55s cubic-bezier(.16,.84,.3,1)}
 .rotator-line{flex-wrap:wrap}
-.rotator::before{content:"grounded";display:inline-block;font-style:italic;visibility:hidden;white-space:nowrap}
 .rotator span{white-space:nowrap}
 
 /* --- Richer ambient orbs on light/accent sections (more presence + a 4th orb) --- */
@@ -1121,9 +1120,41 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
   function go(i){slides[si].classList.remove('active');dotsEls[si].classList.remove('active');si=i;slides[si].classList.add('active');dotsEls[si].classList.add('active');}
   if(!reduce && slides.length>1){setInterval(()=>go((si+1)%slides.length),6000);}
 
-  // word rotator
+  // word rotator — box width tracks the active word (measured), so "in Truth." stays flush
   const rot=document.getElementById('rotator');
-  if(rot && !reduce){const words=[...rot.children];let wi=0;setInterval(()=>{words[wi].classList.remove('on');words[wi].classList.add('off');const prev=wi;wi=(wi+1)%words.length;words[wi].classList.remove('off');words[wi].classList.add('on');setTimeout(()=>words[prev].classList.remove('off'),600);},2400);}
+  if(rot){
+    const words=[...rot.children];
+    let widths=[], wi=0;
+    // hidden ruler that mirrors the rotator's font so we can measure each word's true width
+    const ruler=document.createElement('span');
+    ruler.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;pointer-events:none';
+    document.body.appendChild(ruler);
+    const measure=()=>{
+      const c=getComputedStyle(words[0]);
+      ruler.style.fontFamily=c.fontFamily;ruler.style.fontSize=c.fontSize;
+      ruler.style.fontWeight=c.fontWeight;ruler.style.fontStyle=c.fontStyle;
+      ruler.style.letterSpacing=c.letterSpacing;
+      widths=words.map(w=>{ruler.textContent=w.textContent;return Math.ceil(ruler.getBoundingClientRect().width)+2;});
+    };
+    const apply=(animate)=>{
+      if(!widths.length)return;
+      if(!animate)rot.style.transition='none';
+      rot.style.setProperty('--rw',widths[wi]+'px');
+      if(!animate){void rot.offsetWidth;rot.style.transition='';}
+    };
+    const setup=()=>{measure();apply(false);};
+    (document.fonts&&document.fonts.ready)?document.fonts.ready.then(setup):setup();
+    let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{measure();apply(false);},150);});
+    if(!reduce && words.length>1){
+      setInterval(()=>{
+        words[wi].classList.remove('on');words[wi].classList.add('off');
+        const prev=wi;wi=(wi+1)%words.length;
+        apply(true);                                   // grow/shrink the box to the new word
+        words[wi].classList.remove('off');words[wi].classList.add('on');
+        setTimeout(()=>words[prev].classList.remove('off'),600);
+      },2400);
+    }
+  }
 
   // tabs
   document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{
