@@ -858,6 +858,33 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
   .stats.four .stat:nth-child(odd)::after{content:"";position:absolute;right:-.5rem;top:14%;bottom:14%;width:1px;background:linear-gradient(180deg,transparent,rgba(4,1,54,.16),transparent)}
 }
 @media(max-width:520px){.stats.four{grid-template-columns:1fr;gap:2.4rem}.stats.four .stat:nth-child(odd)::after{display:none}}
+
+/* ===================== v18: ISB-style animated "From -> To" ledger (#transform) ===================== */
+#transform .xform-list{position:relative;counter-reset:xf;border:none;background:none;gap:0;border-radius:0;overflow:visible}
+#transform .xform-list::before{content:"";position:absolute;left:1.55rem;top:.7rem;bottom:.7rem;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(213,180,112,.45) 9%,rgba(213,180,112,.45) 91%,transparent)}
+#transform .xform{counter-increment:xf;position:relative;grid-template-columns:minmax(230px,320px) 1fr;
+  padding:1.55rem 1.6rem 1.55rem 4.3rem;background:none;border-bottom:1px solid rgba(246,242,232,.10);
+  transition:background .45s var(--ease-isb),padding-left .45s var(--ease-isb)}
+#transform .xform:last-child{border-bottom:none}
+#transform .xform::before{content:counter(xf,decimal-leading-zero);position:absolute;left:.85rem;top:1.5rem;
+  font-family:var(--serif);font-size:1.05rem;color:var(--gold);opacity:.55;background:var(--navy);padding:.2rem 0;line-height:1}
+#transform .xform:hover{background:linear-gradient(90deg,rgba(213,180,112,.12),transparent 72%);padding-left:4.8rem}
+#transform .xform:hover::before{opacity:1}
+#transform .xf-tags .arrowto{display:inline-block;transition:transform .45s var(--ease-isb)}
+#transform .xform:hover .arrowto{transform:translateX(6px)}
+#transform .xf-tags .to{transition:color .35s}
+#transform .xform:hover .to{color:var(--gold-bright)}
+/* reveal rows by sliding in from the left (ISB) rather than the default rise */
+#transform .xform.reveal{opacity:0;transform:translateX(-32px)}
+#transform .xform.reveal.in{opacity:1;transform:none}
+@media(max-width:860px){
+  #transform .xform{grid-template-columns:1fr;padding-left:3.5rem}
+  #transform .xform:hover{padding-left:3.9rem}
+  #transform .xform-list::before{left:1.25rem}
+  #transform .xform::before{left:.6rem}
+}
+@media(prefers-reduced-motion:reduce){#transform .xform.reveal{transform:none;opacity:1}}
 </style>
 </head>
 <body id="top">
@@ -1238,7 +1265,7 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
 </section>
 
 <section class="final" id="begin">
-  <div class="scene">
+  <div class="scene clip">
     <div class="scene-photo" style="background-image:url('https://cdn.stocksnap.io/img-thumbs/960w/XDNPCSL1U2.jpg')"></div>
   </div>
   <div class="ov"></div>
