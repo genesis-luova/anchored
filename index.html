@@ -834,6 +834,19 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
   html.preload .focus-head .eyebrow,html.preload .jr-head .eyebrow,html.preload .stories-head .eyebrow,
   html.preload .belief-head .eyebrow,html.preload .believe-head .eyebrow{opacity:1;transform:none;transition:none}
 }
+
+/* ===================== v16: ISB-style "by the numbers" band ===================== */
+.stats.four{grid-template-columns:repeat(4,1fr)}
+.stats.four .stat{position:relative;padding:.4rem 1rem}
+.stats.four .stat + .stat::before{content:"";position:absolute;left:0;top:14%;bottom:14%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(4,1,54,.16),transparent)}
+.stats .n .suf{font-size:.44em;vertical-align:.55em;color:var(--gold);font-style:italic;margin-left:.06em}
+@media(max-width:900px){
+  .stats.four{grid-template-columns:repeat(2,1fr);gap:2.6rem 1rem}
+  .stats.four .stat + .stat::before{display:none}
+  .stats.four .stat:nth-child(odd)::after{content:"";position:absolute;right:-.5rem;top:14%;bottom:14%;width:1px;background:linear-gradient(180deg,transparent,rgba(4,1,54,.16),transparent)}
+}
+@media(max-width:520px){.stats.four{grid-template-columns:1fr;gap:2.4rem}.stats.four .stat:nth-child(odd)::after{display:none}}
 </style>
 </head>
 <body id="top">
@@ -1187,6 +1200,22 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
         <div class="mcard" style="left:74%;top:72%"><div class="mc-name"><span class="mc-flag">🇸🇬</span>Singapore</div><div class="mc-addr">Eu Tong Sen Street #14-94, The Central</div></div>
       </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- BY THE NUMBERS (ISB-style reach band) -->
+<section class="section section--ever" id="reach">
+  <div class="wrap">
+    <div class="stats-head reveal">
+      <span class="eyebrow dark center" style="justify-content:center">By the Numbers</span>
+      <h2 class="head cu" style="margin-top:1rem">A movement <em>rooted</em> across the world.</h2>
+    </div>
+    <div class="stats four reveal" data-d="80">
+      <div class="stat"><div class="n" data-target="5">0</div><div class="lab">Countries where AnchorEd families are rooted</div></div>
+      <div class="stat"><div class="n" data-target="7">0</div><div class="lab">Learning partners in the ecosystem</div></div>
+      <div class="stat"><div class="n" data-target="4">0</div><div class="lab">Anchors that hold a family firm</div></div>
+      <div class="stat"><div class="n" data-target="12">0</div><div class="lab">Nursery through Grade 12</div></div>
     </div>
   </div>
 </section>
