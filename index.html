@@ -885,6 +885,33 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
   #transform .xform::before{left:.6rem}
 }
 @media(prefers-reduced-motion:reduce){#transform .xform.reveal{transform:none;opacity:1}}
+
+/* ===================== v19: ISB "Designed Around You" split feature (#transform intro) ===================== */
+#transform .xform-feature{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2.4rem,5vw,5rem);align-items:center;margin-bottom:clamp(3.2rem,6vw,5rem)}
+#transform .xf-visual{position:relative}
+#transform .xf-block{position:relative;background:linear-gradient(158deg,var(--evergreen-2) 0%,var(--sage-deep) 58%,var(--evergreen) 100%);
+  border-radius:22px;padding:clamp(1.3rem,2.8vw,2.2rem);aspect-ratio:1/1.12;display:flex;align-items:flex-end;overflow:hidden;
+  box-shadow:0 44px 96px -46px rgba(0,0,0,.65),inset 0 0 0 1px rgba(213,180,112,.18)}
+#transform .xf-arch{position:relative;width:100%;height:90%;border-radius:999px 999px 20px 20px;overflow:hidden;box-shadow:0 22px 52px -26px rgba(0,0,0,.6)}
+#transform .xf-arch .scene-photo{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.03);transition:transform 1.5s var(--ease-isb)}
+#transform .xf-visual:hover .xf-arch .scene-photo{transform:scale(1.1)}
+#transform .xf-arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(1,50,32,.04),rgba(4,1,54,.34));mix-blend-mode:multiply}
+#transform .xf-mark{position:absolute;top:clamp(.9rem,2vw,1.5rem);left:clamp(.9rem,2vw,1.5rem);width:clamp(40px,5.6vw,60px);height:auto;color:var(--gold-bright);z-index:3;filter:drop-shadow(0 4px 14px rgba(0,0,0,.45))}
+#transform .xf-copy{position:relative}
+#transform .xf-copy .eyebrow{margin-bottom:1rem}
+#transform .xf-copy .head{margin:.4rem 0 1.15rem}
+#transform .xf-copy .lede{color:var(--on-dark-60);max-width:48ch}
+#transform .xf-jump{display:inline-flex;align-items:center;gap:.75rem;margin-top:1.9rem;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+#transform .xf-jump .arr{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(213,180,112,.5);font-size:1rem;
+  transition:transform .45s var(--ease-isb),background .3s,color .3s,border-color .3s;animation:xfbob 2.4s ease-in-out infinite}
+#transform .xf-jump:hover .arr{background:var(--gold);color:var(--navy);border-color:var(--gold);animation:none;transform:translateY(4px)}
+@keyframes xfbob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@media(max-width:860px){
+  #transform .xform-feature{grid-template-columns:1fr;gap:2.2rem}
+  #transform .xf-block{aspect-ratio:5/4;max-width:480px;margin-inline:auto;width:100%}
+  #transform .xf-arch{height:100%}
+}
+@media(prefers-reduced-motion:reduce){#transform .xf-jump .arr{animation:none}#transform .xf-visual:hover .xf-arch .scene-photo{transform:scale(1.03)}}
 </style>
 </head>
 <body id="top">
@@ -1120,12 +1147,22 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
 </section>
 
 <section class="section section--navy" id="transform">
-  <div class="wrap">
-    <div class="jr-head reveal" style="text-align:center">
-      <span class="eyebrow center" style="justify-content:center;color:#d5b470">The Transformation</span>
-      <h2 class="head" style="margin:1rem auto 0;max-width:24ch">Children thrive, families flourish, and generations are <em>transformed</em> when parents are anchored.</h2>
+  <div class="wrap xform-feature">
+    <div class="xf-visual reveal">
+      <div class="xf-block">
+        <svg class="xf-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>
+        <div class="xf-arch"><div class="scene-photo" style="background-image:url('https://cdn.stocksnap.io/img-thumbs/960w/NTY4GIGUHR.jpg')"></div></div>
+      </div>
     </div>
-    <div class="xform-list">
+    <div class="xf-copy reveal" data-d="120">
+      <span class="eyebrow" style="color:#d5b470">The Transformation</span>
+      <h2 class="head">Children thrive, families flourish, and generations are <em>transformed</em> when parents are anchored.</h2>
+      <p class="lede">When home and learning move together — anchored in Truth — the change shows up everywhere: in confidence, character, connection, and the legacy a family leaves behind.</p>
+      <a href="#xform-shifts" class="xf-jump">See the shifts <span class="arr">↓</span></a>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="xform-list" id="xform-shifts">
       <div class="xform reveal" data-d="40">
         <div class="xf-tags"><span class="xf-label">From</span><span class="from">Overwhelmed</span><span class="arrowto">→</span><span class="to">Confident</span></div>
         <p>Navigate parenting, educational, and life decisions with greater clarity and confidence.</p>
