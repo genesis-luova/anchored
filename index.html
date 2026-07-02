@@ -788,6 +788,30 @@ html.preload.loaded .hero .cta-row{animation-play-state:running}
   #preloader .pl-track::after{left:0;width:100%}
   html.preload.loaded #preloader{transition:opacity .3s,visibility .3s}
 }
+
+/* ===================== CRAFT LAYER (v14): choreography, scroll-spy, finish ===================== */
+:root{--ease:cubic-bezier(.22,1,.36,1)}
+
+/* refined brand scrollbar — a small hand-crafted tell (desktop pointers only) */
+@media(hover:hover) and (pointer:fine){
+  html{scrollbar-width:thin;scrollbar-color:rgba(213,180,112,.55) transparent}
+  ::-webkit-scrollbar{width:12px;height:12px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(213,180,112,.6),rgba(151,171,137,.55));
+    border-radius:99px;border:3px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--gold),var(--gold-bright));background-clip:padding-box}
+}
+
+/* scroll-spy: the section you're reading stays lit in the nav */
+.nav-links a:not(.btn).active{opacity:1}
+.nav-links a:not(.btn).active::after{width:100%}
+header.nav.scrolled .nav-links a:not(.btn).active{opacity:1;color:var(--gold)}
+
+/* revealed cards land with a touch of spring, honoring the (now-active) --d cascade */
+.reveal{transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.jr,.loc,.focus,.testi,.step-card,.lrow,.pcar-arrow,.btn,.socials a{transition-timing-function:var(--ease)}
+
+@media(prefers-reduced-motion:reduce){.reveal{transition:none}}
 </style>
 </head>
 <body id="top">
@@ -1543,6 +1567,49 @@ html.preload.loaded .hero .cta-row{animation-play-state:running}
     var vio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ if(!stopped) startAuto(); } else pauseAuto(); }); },{threshold:.35});
     vio.observe(car);
   } else startAuto();
+})();
+</script>
+
+<script>
+/* ===================== CRAFT LAYER (v14): activate choreography + scroll-spy ===================== */
+(function(){
+  /* 1) The markup carries data-d stagger values, but nothing ever fed them to the CSS
+        (transition-delay:calc(var(--d)*1ms)). Wire them up so reveals actually cascade. */
+  document.querySelectorAll('.reveal[data-d]').forEach(function(el){
+    el.style.setProperty('--d', parseInt(el.getAttribute('data-d'), 10) || 0);
+  });
+
+  /* 2) Grids that had no stagger now cascade their cards in sequence (capped so tails stay tight). */
+  document.querySelectorAll('.jr-grid,.steps-grid,.focus-grid,.testi-grid,.locs').forEach(function(g){
+    Array.prototype.forEach.call(g.children, function(el, i){
+      if(el.classList.contains('reveal') && !el.hasAttribute('data-d')){
+        var d = Math.min(i, 7) * 85;
+        el.setAttribute('data-d', String(d));
+        el.style.setProperty('--d', d);
+      }
+    });
+  });
+
+  /* 3) Scroll-spy: keep the current section lit in the nav (a crafted, non-templated touch). */
+  if(!('IntersectionObserver' in window)) return;
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]:not(.btn)'));
+  var map = {};
+  links.forEach(function(a){ var id = a.getAttribute('href').slice(1); var s = document.getElementById(id); if(s) map[id] = a; });
+  var sections = Object.keys(map).map(function(id){ return document.getElementById(id); });
+  if(!sections.length) return;
+  var visible = new Set(), current = null;
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) visible.add(e.target); else visible.delete(e.target); });
+    var best = null, bestDist = Infinity, line = window.innerHeight * 0.4;
+    visible.forEach(function(s){ var d = Math.abs(s.getBoundingClientRect().top - line); if(d < bestDist){ bestDist = d; best = s; } });
+    var id = best ? best.id : null;
+    if(id !== current){
+      current = id;
+      links.forEach(function(l){ l.classList.remove('active'); });
+      if(id && map[id]) map[id].classList.add('active');
+    }
+  }, { rootMargin:'-15% 0px -15% 0px', threshold:[0, .2, .5, 1] });
+  sections.forEach(function(s){ spy.observe(s); });
 })();
 </script>
 </body>
