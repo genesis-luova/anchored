@@ -1321,8 +1321,16 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
   }
   if(!reduce){const sm=document.querySelector('.split-media .scene');if(sm){let tk=false;window.addEventListener('scroll',()=>{if(!tk){requestAnimationFrame(()=>{const r=sm.getBoundingClientRect();const off=(r.top+r.height/2-innerHeight/2)/innerHeight;sm.style.transform='translateY('+(off*-16).toFixed(1)+'px)';tk=false;});tk=true;}},{passive:true});}}
 
-  const headIO=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const el=e.target;if(getComputedStyle(el).textAlign==='center')el.classList.add('cu');el.classList.add('drawn');headIO.unobserve(el);}})},{threshold:0.55});
-  document.querySelectorAll('h2.head').forEach(el=>headIO.observe(el));
+  const drawHead=(el)=>{if(el.classList.contains('drawn'))return;if(getComputedStyle(el).textAlign==='center')el.classList.add('cu');el.classList.add('drawn');};
+  const headEls=[...document.querySelectorAll('h2.head')];
+  // threshold:0 + bottom rootMargin fires as soon as a heading enters view — works for headings
+  // TALLER than the viewport (a ratio threshold like 0.55 could never fire for those, leaving them hidden).
+  const headIO=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){drawHead(e.target);headIO.unobserve(e.target);}})},{threshold:0,rootMargin:'0px 0px -12% 0px'});
+  headEls.forEach(el=>headIO.observe(el));
+  // safety net: never allow a heading to stay hidden if the observer misses it
+  const headSafety=()=>{headEls.forEach(el=>{if(!el.classList.contains('drawn')&&el.getBoundingClientRect().top<window.innerHeight*0.92)drawHead(el);});};
+  window.addEventListener('scroll',headSafety,{passive:true});
+  window.addEventListener('load',headSafety);headSafety();
 
   /* ===== ultimate effects (v12) ===== */
   (function(){
