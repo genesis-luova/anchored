@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="https://lh3.googleusercontent.com/d/1uhp6ukl80xkJ6zxqMsmSCpIYJktqB7Wu=w1920" fetchpriority="high" />
+<script>document.documentElement.classList.add('preload')</script>
 <style>
   :root{
     --navy:#040136; --navy-2:#0b0942; --navy-3:#1b1570;
@@ -748,9 +750,71 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
 @media(max-width:480px){.map-cards{grid-template-columns:1fr}}
 
 .anchor-node img.anchor-ic{width:74%;height:74%;object-fit:contain;display:block}
+
+/* ===================== PREMIUM PAGE LOADER + CINEMATIC REVEAL (v13) ===================== */
+#preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;
+  background:radial-gradient(125% 150% at 50% 28%,#0b0942 0%,#06023f 56%,#02261a 100%);
+  opacity:0;visibility:hidden;transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility .9s}
+html.preload #preloader{opacity:1;visibility:visible}
+html.preload.loaded #preloader{opacity:0;visibility:hidden}
+#preloader .pl-grain{position:absolute;inset:0;opacity:.35;mix-blend-mode:soft-light;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='pn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pn)'/%3E%3C/svg%3E")}
+#preloader .pl-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:1.35rem;
+  opacity:0;transform:translateY(8px);animation:plrise 1s .08s cubic-bezier(.2,.8,.2,1) forwards}
+html.loaded #preloader .pl-inner{animation:pldrop .7s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes plrise{to{opacity:1;transform:none}}
+@keyframes pldrop{to{opacity:0;transform:translateY(-12px)}}
+#preloader .pl-mark{color:var(--gold-bright);animation:plglow 1.9s ease-in-out infinite alternate}
+@keyframes plglow{from{filter:drop-shadow(0 0 5px rgba(232,200,120,.28))}to{filter:drop-shadow(0 0 20px rgba(232,200,120,.7))}}
+#preloader .pl-word{font-family:var(--serif);font-size:1.55rem;letter-spacing:.16em;color:var(--gold-soft);line-height:1}
+#preloader .pl-track{position:relative;width:154px;height:2px;border-radius:2px;background:rgba(213,180,112,.16);overflow:hidden}
+#preloader .pl-track::after{content:"";position:absolute;top:0;left:-45%;width:45%;height:100%;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);animation:plsweep 1.15s cubic-bezier(.45,0,.2,1) infinite}
+@keyframes plsweep{0%{left:-48%}100%{left:104%}}
+
+/* hero content holds until the loader lifts, then rises in sequence — cinematic handoff */
+html.preload .hero .rotator-line,
+html.preload .hero h1,
+html.preload .hero p.sub,
+html.preload .hero .cta-row{animation-play-state:paused}
+html.preload.loaded .hero .rotator-line,
+html.preload.loaded .hero h1,
+html.preload.loaded .hero p.sub,
+html.preload.loaded .hero .cta-row{animation-play-state:running}
+
+@media(prefers-reduced-motion:reduce){
+  #preloader .pl-inner,#preloader .pl-mark,#preloader .pl-track::after,#preloader .pl-grain{animation:none}
+  #preloader .pl-inner{opacity:1;transform:none}
+  #preloader .pl-track::after{left:0;width:100%}
+  html.preload.loaded #preloader{transition:opacity .3s,visibility .3s}
+}
 </style>
 </head>
 <body id="top">
+<div id="preloader" aria-hidden="true">
+  <span class="pl-grain"></span>
+  <div class="pl-inner">
+    <svg class="pl-mark" viewBox="0 0 24 24" width="58" height="58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>
+    <span class="pl-word">AnchorEd</span>
+    <span class="pl-track"></span>
+  </div>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, done=false, start=Date.now();
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function reveal(){
+    if(done)return; done=true; root.classList.add('loaded');
+    setTimeout(function(){var p=document.getElementById('preloader');if(p&&p.parentNode)p.parentNode.removeChild(p);},1000);
+  }
+  if(reduce){reveal();return;}
+  var MIN=650; // keep the brand moment from flashing on fast connections
+  function finish(){setTimeout(reveal,Math.max(0,MIN-(Date.now()-start)));}
+  if(document.readyState==='complete')finish();
+  else window.addEventListener('load',finish);
+  setTimeout(reveal,4500); // hard fallback: content never gets stuck behind the loader
+})();
+</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <g id="routes">
