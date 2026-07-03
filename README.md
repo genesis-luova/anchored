@@ -44,6 +44,33 @@ stuck behind the loader.
 **CSS order matters.** The numbered files are cascade layers extracted from the
 site's design evolution; always link them in sequence.
 
+## Onboarding — a guided tour
+
+New to the codebase? Read in this order (~30 minutes):
+
+1. **This README** — architecture and deploy model (you are here).
+2. **`index.html`** — skim the section landmarks (`<!-- HERO -->`, `<!-- ABOUT -->` …).
+   It is intentionally markup-only; every file has a header comment explaining itself.
+3. **`js/core.js`** — the workhorse: reveals, hero slideshow, counters, heading
+   reveals. Its header documents the DOM/CSS contract (which classes JS toggles
+   and CSS animates — `.in`, `.drawn`, `.is-in-view` are the seams between the two).
+4. **`css/10-foundation.css`** — design tokens (`:root` custom properties) and
+   base components. The other five CSS files are later cascade layers; their
+   headers say what each may override.
+5. **`js/chat-widget.js` + `api/chat.js`** — the assistant pair (client widget
+   with built-in knowledge base; serverless function for live Claude answers).
+
+House conventions worth knowing before your first PR:
+
+- **Motion is opt-in and reversible** — every animation honors
+  `prefers-reduced-motion`; new effects must too.
+- **CSS link order is load-bearing** — the numbered files are cascade layers;
+  never reorder the `<link>` tags or alphabetize the folder.
+- **Two scripts stay inline in `index.html`** (preload class + loader
+  controller) so the page can never be stuck behind the loader if modules fail.
+- **No build step by design** — native ES modules, plain CSS. Don't add a
+  bundler without a real need.
+
 ## Local development
 
 ```bash

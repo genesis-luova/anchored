@@ -6,12 +6,40 @@
 <title>AnchorEd — Build a Legacy That Endures for Generations</title>
 <meta name="description" content="AnchorEd empowers parents to build a thriving legacy through transformative learning experiences, grounded in God's truth." />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+  ARCHITECTURE ORIENTATION (full tour: README.md)
+  Static, zero-build site: this file is content markup only. Behavior lives in
+  js/ (native ES modules via js/main.js at the bottom); presentation lives in
+  css/ as SIX NUMBERED FILES linked below.
+
+  CSS LINK ORDER IS LOAD-BEARING: the numbered files are cascade layers
+  extracted from the design's evolution — each later file intentionally
+  overrides earlier ones (20 re-scrims the hero from 10, 50 re-times .reveal,
+  60 re-declares map keyframes from 20…). Never reorder or alphabetize them.
+
+  TWO SCRIPTS STAY INLINE on purpose (critical path, must not depend on
+  module loading):
+    1. the html.preload class-setter just below — runs before the stylesheets
+       so "hidden until revealed" CSS only ever applies when JS is running;
+    2. the page-loader controller after #preloader in <body> — lifts the
+       loader with its own timers + a 4.5s hard fallback, so content can never
+       be stuck behind the loader even if the ES modules 404 or throw.
+═══════════════════════════════════════════════════════════════════════ -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="preload" as="image" href="assets/img/hero-1.jpg" fetchpriority="high" />
+
+<!-- INLINE SCRIPT 1 of 2 — must stay inline and BEFORE the stylesheets.
+     html.preload is the gate for every "start hidden, reveal on scroll/load"
+     rule (40-loader, 50-motion). Added here = no flash of hidden content;
+     absent (JS off) = the page renders fully visible. -->
 <script>document.documentElement.classList.add('preload')</script>
+
+<!-- Cascade layers — link in numeric order only (see orientation note above). -->
 <link rel="stylesheet" href="css/10-foundation.css" />
 <link rel="stylesheet" href="css/20-brand-layers.css" />
 <link rel="stylesheet" href="css/30-widgets.css" />
@@ -20,6 +48,8 @@
 <link rel="stylesheet" href="css/60-isb-unified.css" />
 </head>
 <body id="top">
+
+<!-- PAGE LOADER (visible only while html.preload && !html.loaded; removed from DOM after reveal) -->
 <div id="preloader" aria-hidden="true">
   <span class="pl-frame"></span>
   <span class="pl-grain"></span>
@@ -34,6 +64,12 @@
     <span class="pl-track"></span>
   </div>
 </div>
+
+<!-- INLINE SCRIPT 2 of 2 — the loader controller. Stays inline so the loader
+     lifts even if the ES modules fail to load. Reveal = html.loaded + remove
+     #preloader; paths: reduced-motion (instant), window load (after a 1750ms
+     minimum so the word sequence in 40-loader.css finishes), and a 4500ms
+     hard fallback. Changing 40-loader's word cadence? Adjust MIN below too. -->
 <script>
 (function(){
   var root=document.documentElement, done=false, start=Date.now();
@@ -51,6 +87,7 @@
 })();
 </script>
 
+<!-- SHARED SVG DEFS — #routes is <use>'d by the hero and mission sections -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <g id="routes">
     <path d="M620 -40 C 620 70 470 110 470 220 S 580 360 580 470 S 470 590 470 700" fill="none" stroke="var(--gold)" stroke-width="1.4"/>
@@ -60,8 +97,10 @@
   
 </defs></svg>
 
+<!-- SCROLL PROGRESS BAR (width written by js/core.js) -->
 <div class="progress" id="progress"></div>
 
+<!-- FIXED NAV (js/core.js toggles .scrolled; js/craft.js scroll-spy sets .active links) -->
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
     <a href="#top" class="brand" aria-label="AnchorEd home">
@@ -78,11 +117,14 @@
     <button class="menu-btn" id="menuBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </header>
+
+<!-- MOBILE MENU OVERLAY (js/core.js toggles .open) -->
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
   <a href="#about">About</a><a href="#ecosystem">Learning Ecosystem</a><a href="#movement">Global Movement</a><a href="#contact">Contact</a><a href="#begin">Explore</a>
 </div>
 
+<!-- STICKY SIDE CTA (desktop only; hidden while chat is open via body.achat-on) -->
 <div class="sticky-cta">
   <a href="#begin" class="gold">Explore</a>
   <a href="#contact">Contact</a>
@@ -255,6 +297,7 @@
   </div>
 </section>
 
+<!-- THE TRANSFORMATION (#transform — split feature + From→To ledger) -->
 <section class="section section--navy" id="transform">
   <div class="wrap xform-feature">
     <div class="xf-visual">
@@ -351,6 +394,9 @@
 
 
 <!-- CONTACT -->
+<!-- GLOBAL MOVEMENT (#movement — presence map + region list).
+     Note: the FINAL CTA / CONTACT comments above are historical — the final
+     CTA is #begin further down, and contact links live in the footer. -->
 <section class="section" id="movement">
   <div class="wrap">
     <div class="loc-head reveal" style="text-align:center;max-width:780px;margin:0 auto">
@@ -407,6 +453,7 @@
   </div>
 </section>
 
+<!-- FINAL CTA (#begin) -->
 <section class="final" id="begin">
   <div class="scene clip">
     <div class="scene-photo" style="background-image:url('assets/img/final-cta.jpg')"></div>
@@ -424,6 +471,7 @@
   </div>
 </section>
 
+<!-- FOOTER / CONTACT (#contact) -->
 <footer id="contact">
   <div class="sec-living living"><span class="blob b1"></span><span class="blob b2"></span><span class="grain"></span></div>
   <div class="wrap">
@@ -483,6 +531,7 @@
 
 
 
+<!-- ES MODULE ENTRY POINT — imports all behavior in order (see js/main.js) -->
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -1,5 +1,56 @@
-/* AnchorEd — 50-motion.css · scroll choreography: craft layer, heading reveals, stats band, ledger + split feature motion
-   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ────────────────────────────────────────────────────────────────────────────
+   AnchorEd — 50-motion.css
+   Scroll choreography: the craft layer, editorial heading reveals, the
+   by-the-numbers stats band, and the #transform ledger + split-feature motion.
+
+   RESPONSIBILITIES
+   - Defines --ease (spring) and applies it/--ease-isb across reveal transitions
+   - Brand scrollbar (desktop fine-pointer only) and nav scroll-spy active state
+   - Editorial h2.head clip-mask reveal + eyebrow drift (gated on html.preload)
+   - .stats.four "by the numbers" band with divider rules and .suf superscripts
+   - #transform: animated From→To ledger (numbered rail, slide-in rows) and the
+     "Designed Around You" split feature with .is-in-view stagger
+
+   TABLE OF CONTENTS (banner order)
+   CRAFT LAYER (v14: scrollbar, scroll-spy, reveal re-timing)
+   → v15 editorial heading reveals + parallax depth
+   → v16 ISB "by the numbers" band (.stats.four)
+   → v18 animated From→To ledger (#transform .xform)
+   → v19 "Designed Around You" split feature (#transform .xform-feature)
+   → ISB scroll reveal (.is-in-view stagger for the feature)
+
+   CASCADE POSITION
+   Fifth layer. Re-times the base .reveal transition from 10-foundation (now
+   --ease-isb) and re-skins the .xform base styles from 30-widgets under
+   #transform. Consumes --ease-isb from 40-loader. 60-isb-unified loads after
+   and may override anything here (it reuses the same patterns per-section).
+
+   DOM/CSS CONTRACT (JS-toggled hooks styled here)
+   - .nav-links a.active             scroll-spy current section (js/craft.js)
+   - h2.head.drawn                   triggers the clip-mask reveal (js/core.js headIO)
+   - html.preload                    gates heading/eyebrow reveals so text still
+                                     renders when JS is off (class never added)
+   - .reveal.in                      inherits the fire-once observer (js/core.js)
+   - #transform .xform-feature.is-in-view   replaying section reveal
+                                     (js/feature-reveal.js toggles on enter/leave)
+
+   GOTCHAS
+   - The h2.head clip reveal ONLY applies under html.preload — that is the
+     no-JS/failed-JS escape hatch. Never write the hidden state without the gate.
+   - `html.preload #transform .xf-copy h2.head{clip-path:none!important}` opts
+     that one heading OUT of the clip mask so .is-in-view alone owns it;
+     without it the heading is double-driven and can stick half-clipped.
+     60-isb-unified repeats the same trick for #about.
+   - .reveal transition is re-declared here; if you change reveal timing do it
+     here (not in 10-foundation) or the change is shadowed.
+   - #transform .xform rows slide from the LEFT (translateX) instead of the
+     default rise — the reduced-motion guard resets both axes.
+
+   Edit me when… you tune scroll choreography, heading reveals, the stats band,
+   or any #transform motion. Section-specific effects elsewhere live in 60.
+
+   Load order matters: files are numbered and must be linked in sequence (cascade layers).
+   ──────────────────────────────────────────────────────────────────────────── */
 /* ===================== CRAFT LAYER (v14): choreography, scroll-spy, finish ===================== */
 :root{--ease:cubic-bezier(.22,1,.36,1)}
 

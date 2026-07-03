@@ -1,5 +1,63 @@
-/* AnchorEd — 60-isb-unified.css · unified ISB scroll/effect layer, #about intro, presence map, film frame, map appeal + clarity
-   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ────────────────────────────────────────────────────────────────────────────
+   AnchorEd — 60-isb-unified.css
+   The unified ISB scroll/effect layer: per-section reveal choreography (blocks
+   A–I), the #about intro feature, the global presence map, the film poster,
+   and the final map appeal/clarity passes.
+
+   RESPONSIBILITIES
+   - Directional reveal variants (.rv-left/.rv-right) for reuse
+   - Section-specific choreography: sage split slide, #anchors chain draw,
+     #movement map gating, #reach stats stagger, mission/vision pair, #join
+     connective line, #ecosystem clip-wipe, footer stagger
+   - #about "Designed Around You"-style intro (grid layout + .is-in-view stagger)
+   - Presence map dots (.pin-p), region list (.presence-list), film poster
+     (.av-poster), and the v19/v20 map polish (graticule, vignette, arc network)
+
+   TABLE OF CONTENTS (banner order)
+   (A) directional reveal variants → (B) sage heart split → (C) #anchors chain
+   draw → (D) #movement map arc gating + .mcard stagger → (E) #reach per-stat
+   rise → (F) mission/vision pair + scripture beat → (G) #join connective line
+   → (H) #ecosystem clip-wipe → (I) footer note → #about intro feature (v17)
+   → presence map dots + region list (v18) → film poster (v18)
+   → map appeal (v19) → map clarity (v20)
+
+   CASCADE POSITION
+   Sixth and FINAL layer — nothing loads after it, so rules here win any equal-
+   specificity fight with 10–50. It intentionally overrides: 20-brand-layers'
+   map pin/arc styling and @keyframes (v20 re-declares arcdraw/pinpop — the
+   LAST definition of a keyframes name wins), 30-widgets' .step-card transition,
+   and 50-motion's generic reveal for specific sections.
+
+   DOM/CSS CONTRACT (JS-toggled hooks styled here)
+   - .reveal.in                      fire-once observer (js/core.js) — drives the
+                                     sage split, #anchors chain, .worldmap, scripture
+   - .is-in-view                     replaying observer (js/feature-reveal.js) —
+                                     drives .stats.four, .mv-grid, #about .believe-feature
+   - .steps-grid.in-line             fire-once connective line (js/core.js)
+   - .worldmap.in                    gates arc draw + pin pop + .mcard stagger
+   - .pin-p --dl                     per-dot pop delay, set inline in the SVG markup
+   - html.preload                    used to opt the #about heading out of the
+                                     50-motion clip mask (same trick as #transform)
+
+   GOTCHAS
+   - Blocks in this file OVERRIDE EACH OTHER top-to-bottom by design: v20 "map
+     clarity" re-declares @keyframes pinpop/arcdraw and the arc nth-child delays
+     from v18/v19 (and from 20-brand-layers). Always edit the LAST occurrence.
+   - The elements driven by .is-in-view here deliberately DROP the .reveal class
+     in markup (see block comments) so they are single-driven; re-adding .reveal
+     to them reintroduces compound double-motion.
+   - Reduced-motion guards use !important on purpose — the nth-child transforms
+     have higher specificity and would otherwise defeat the guard.
+   - (C) composes translateX(-50%) INTO the scaleY draw transform; dropping the
+     translate un-centers the chain connector on its node axis.
+   - (B) animates the .split-media wrapper because js/parallax.js writes
+     transform on the inner .scene — animating the same element would fight it.
+
+   Edit me when… you add or tune a section-specific scroll effect, or change
+   the presence-map presentation. This is the intended home for new choreography.
+
+   Load order matters: files are numbered and must be linked in sequence (cascade layers).
+   ──────────────────────────────────────────────────────────────────────────── */
 /* ================= AnchorEd × ISB — unified scroll/effect layer (v17 FINAL). Additive; append before closing style. ================= */
 
 /* ---------- (A) Directional reveal variants (opt-in; default reveal stays translateY) ----------

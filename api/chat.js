@@ -7,7 +7,41 @@
 //   3. js/chat-widget.js already sets  var ANCHOR_API='/api/chat'  — no change needed.
 //   4. Redeploy. Anchor now answers with live Claude, falling back to the built-in
 //      knowledge base automatically if the API is ever unavailable.
+//
+// RESPONSIBILITIES
+//   • Accept POST {message, history} from js/chat-widget.js, forward the
+//     conversation to the Anthropic Messages API with the AnchorEd persona,
+//     and return {reply}.
+//   • Clamp inputs (message ≤ 2000 chars, history ≤ last 12 turns) to bound
+//     token spend and shrug off junk payloads.
+//
+// DOM/CSS CONTRACT
+//   • None — server-side only. The client counterpart is js/chat-widget.js
+//     (var ANCHOR_API='/api/chat'); it renders {reply} verbatim in the chat
+//     log and treats any network error, non-2xx status, or missing reply
+//     field as "API unavailable" (→ built-in knowledge base).
+//
+// GOTCHAS
+//   • Two distinct failure shapes, on purpose:
+//     – Config/validation problems (wrong method, empty message, missing
+//       ANTHROPIC_API_KEY) return non-2xx {error}, which the widget treats
+//       as unavailable and answers from its local KB.
+//     – Runtime exceptions return HTTP 200 with a friendly apology {reply},
+//       which the widget shows as a normal answer. Keep that body shaped
+//       like a success or the apology stops rendering.
+//   • The model is pinned to a dated Haiku snapshot (fast, low-cost tier —
+//     right-sized for short sales replies). Change it deliberately, and
+//     re-test tone/latency.
+//   • Calls the API with the platform's global fetch rather than the
+//     Anthropic SDK — keeps the repo dependency-free (zero-build rule).
+//   • Facts live in SYSTEM below AND in the widget's built-in KB
+//     (js/chat-widget.js). Update both together or live and offline answers
+//     will drift apart.
+//
+// Edit me when… brand facts/offices/contact details change (edit SYSTEM),
+// or when changing the model / max_tokens budget.
 
+/* ── system prompt — the source of truth for what Anchor may claim ──────── */
 const SYSTEM = `You are "Anchor", the warm, concise sales and information guide for AnchorEd — a faith-driven family of education brands ("Anchored in Truth. Formed for Legacy.").
 
 Your job: help families understand AnchorEd and take the next step. Be friendly, encouraging, and brief (2–4 sentences). Speak in plain language, never robotic. You may use a single ⚓ or 🙏 occasionally. Always invite a next step. If you don't know something specific (exact tuition, accreditation details, schedules), say so honestly and point them to info@anchored.global. Never invent facts, prices, or policies.
@@ -29,9 +63,11 @@ FACTS YOU KNOW:
 
 When a parent shares a grade/age, recommend the most fitting brand(s). For pricing/accreditation/enrollment specifics, direct them to info@anchored.global. Keep replies short and conversational.`;
 
+/* ── request handler ────────────────────────────────────────────────────── */
 export default async function handler(req, res) {
   if (req.method !== 'POST') { res.status(405).json({ error: 'Use POST' }); return; }
   try {
+    // req.body may arrive pre-parsed or as a raw string depending on the runtime
     let body = req.body;
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
     const message = (body && body.message ? String(body.message) : '').slice(0, 2000);
@@ -39,6 +75,7 @@ export default async function handler(req, res) {
     if (!message) { res.status(400).json({ error: 'No message' }); return; }
     if (!process.env.ANTHROPIC_API_KEY) { res.status(500).json({ error: 'Missing ANTHROPIC_API_KEY' }); return; }
 
+    // keep only well-formed user/assistant turns — the Messages API rejects anything else
     const messages = history
       .filter(function (m) { return m && (m.role === 'user' || m.role === 'assistant') && m.content; })
       .map(function (m) { return { role: m.role, content: String(m.content) }; });
@@ -60,11 +97,14 @@ export default async function handler(req, res) {
     });
 
     const data = await r.json();
+    // defensive shape-check: on any unexpected/error response, fall through to the apology
     const reply = (data && data.content && data.content[0] && data.content[0].text)
       ? data.content[0].text
       : "Sorry, I had trouble responding just now. Please reach our team at info@anchored.global.";
     res.status(200).json({ reply: reply });
   } catch (err) {
+    // deliberate 200: the widget renders this reply as a normal answer
+    // (a non-2xx here would make it fall back to the built-in KB instead)
     res.status(200).json({ reply: "Sorry, I had trouble responding just now. Please reach our team at info@anchored.global." });
   }
 }

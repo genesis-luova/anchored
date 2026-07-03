@@ -1,5 +1,53 @@
-/* AnchorEd — 40-loader.css · ISB-style page loader + cinematic hero reveal
-   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ────────────────────────────────────────────────────────────────────────────
+   AnchorEd — 40-loader.css
+   ISB-style full-screen page loader and the cinematic handoff into the hero.
+
+   RESPONSIBILITIES
+   - #preloader panel: framed brand background, grain, logo, word sequence,
+     sweep progress track
+   - Loader lift (opacity/visibility fade) driven by html.loaded
+   - Pausing the hero rise animations until the loader lifts, then releasing them
+   - Reduced-motion path: instant reveal, no word choreography
+
+   TABLE OF CONTENTS (banner order)
+   ISB-STYLE PAGE LOADER + CINEMATIC REVEAL (v17): #preloader shell → inner
+   items/word cadence → progress track → hero animation gating → reduced-motion
+
+   CASCADE POSITION
+   Fourth layer. Depends on tokens from 10-foundation (--ivory, --gold, --serif)
+   and on the hero rise animations defined there (it only pauses/runs them).
+   Defines --ease-isb, which 50-motion and 60-isb-unified consume everywhere.
+   Nothing later overrides this file's loader rules.
+
+   DOM/CSS CONTRACT (classes/elements this file keys on)
+   - html.preload      added by the tiny inline <script> in <head> BEFORE the
+                       stylesheets load — the earliest possible JS signal
+   - html.loaded       added by the inline loader-controller script in <body>
+                       (min 1750ms word sequence, 4500ms hard fallback)
+   - #preloader        removed from the DOM ~1s after html.loaded lands, so
+                       rules here stop matching entirely after startup
+   - Pauses/releases:  .hero .rotator-line / h1 / p.sub / .cta-row via
+                       animation-play-state (animations themselves live in
+                       10-foundation's `rise` keyframes)
+
+   GOTCHAS
+   - Everything is gated on html.preload, which only exists when JS runs. With
+     JS disabled the loader stays opacity:0/hidden and content renders normally
+     — that failsafe is the whole reason for the class-based gating. Never make
+     #preloader visible by default.
+   - html.preload also gates the heading clip reveals in 50-motion; renaming or
+     removing the class breaks that file too.
+   - The word-sequence timings (.36/.54/.72s delays) are paired with the inline
+     controller's MIN=1750ms floor in index.html; lengthen the sequence and you
+     must raise MIN, or the panel lifts mid-word.
+   - Reduced motion swaps the animated sweep for a full static bar and shortens
+     the lift to .3s — keep that branch when touching the track.
+
+   Edit me when… you change loader visuals, word cadence, or the loader→hero
+   timing handoff (in tandem with the inline controller in index.html).
+
+   Load order matters: files are numbered and must be linked in sequence (cascade layers).
+   ──────────────────────────────────────────────────────────────────────────── */
 /* ===================== ISB-STYLE PAGE LOADER + CINEMATIC REVEAL (v17) ===================== */
 :root{--ease-isb:cubic-bezier(.175,.885,.32,1.15)}
 #preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;

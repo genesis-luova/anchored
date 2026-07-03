@@ -1,5 +1,57 @@
-/* AnchorEd — 30-widgets.css · chat assistant, anchoring chain, problem/steps/ledger, pillars carousel, map cards
-   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ────────────────────────────────────────────────────────────────────────────
+   AnchorEd — 30-widgets.css
+   Self-contained interactive widgets: the Anchor chat assistant, the anchoring
+   chain, the problem/steps/transformation blocks, the pillars carousel, and the
+   on-map location cards.
+
+   RESPONSIBILITIES
+   - Complete chat assistant UI (.achat*): launcher, teaser bubble, panel,
+     header, message stream, suggestion chips, input row
+   - Anchoring chain (.anchor-step/.anchor-node) numbered vertical timeline
+   - Problem section theme (.problem-sec), film frame (.av-frame),
+     join-the-movement steps (.step-card), From→To ledger base (.xform*)
+   - Pillars carousel (.pcar*, .pillar) single-card stage + progress/dots/arrows
+   - Floating map location cards (.mcard) + their mobile grid fallback
+
+   TABLE OF CONTENTS (banner order)
+   ANCHOR CHAT ASSISTANT (launcher → teaser → panel → head → body → chips → input
+   → totop relocation → responsive/reduced-motion) → ANCHORING CHAIN
+   → problem section → anchoring-chain video frame → join steps → transformation
+   ledger → pillars carousel → on-map location cards
+
+   CASCADE POSITION
+   Third layer. Overrides 20-brand-layers where widgets collide with polish
+   (notably .totop, see gotcha). Overridden by 50-motion and 60-isb-unified,
+   which re-theme .xform under #transform and re-time .step-card transitions.
+
+   DOM/CSS CONTRACT (JS-toggled hooks styled here)
+   - .achat.open                     panel/launcher open state (js/chat-widget.js)
+   - .achat-teaser.show              teaser bubble reveal (js/chat-widget.js)
+   - body.achat-on                   set while chat is open; hides .sticky-cta/.totop
+   - .amsg.bot/.amsg.user/.atyping   message + typing nodes created by js/chat-widget.js
+   - .pillar.is-active               visible carousel card (js/pillars.js)
+   - .pillar.measuring               transient JS measurement state — must stay
+                                     position:relative + invisible (js/pillars.js)
+   - .av-frame[data-vid]/.av-poster  click-to-play film; js/video.js swaps the
+                                     poster button for the iframe embed
+
+   GOTCHAS
+   - .totop{right:auto!important;left:1.5rem!important} deliberately relocates the
+     scroll-to-top button (defined in 20-brand-layers) to the LEFT so it can never
+     collide with the chat launcher. The !important is load-bearing; don't remove it.
+   - .pillar.measuring exists so pillars.js can measure natural card heights while
+     cards are absolutely positioned; every property there uses !important on
+     purpose so the active/inactive styles can't leak into the measurement.
+   - .xform rules here are the neutral base; 50-motion re-skins them heavily under
+     #transform (numbered rail, slide-in reveal). Prefer editing the #transform
+     block in 50-motion for that section.
+   - The chat teaser is display:none ≤480px; mobile users only get the launcher.
+
+   Edit me when… you restyle the chat widget, chain timeline, steps, pillars
+   carousel, or map cards. Scroll-in choreography for these lives in 50/60.
+
+   Load order matters: files are numbered and must be linked in sequence (cascade layers).
+   ──────────────────────────────────────────────────────────────────────────── */
 /* ===================== ANCHOR CHAT ASSISTANT ===================== */
 .achat{position:fixed;right:1.5rem;bottom:1.5rem;z-index:95;font-family:var(--sans)}
 .achat button{font-family:inherit}

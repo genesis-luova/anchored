@@ -1,5 +1,59 @@
-/* AnchorEd — 20-brand-layers.css · v9-v12 brand gradient panels, aesthetic + background/transition polish
-   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ────────────────────────────────────────────────────────────────────────────
+   AnchorEd — 20-brand-layers.css
+   Brand gradient panels plus the aesthetic/background/transition polish passes
+   (design evolution v9–v12 and later "polish" layers) on top of the foundation.
+
+   RESPONSIBILITIES
+   - Replace flat .scene backgrounds with brand gradients; .scene-photo bg-image photos
+   - Hero shimmer (h1 em), card sheen sweeps, clip-path photo reveals (.scene.clip)
+   - h2.head gold underline draw (.drawn), hover shadows, manifesto (.believe/.stmt)
+   - v12 texture layer: body film grain, ambient orbs behind light sections,
+     cursor .spotlight, .totop scroll-to-top button
+   - Animated world map (.worldmap/.wm-svg pins, arcs, rings) + .legend rows
+   - Aesthetic polish: ::selection, :focus-visible, text-wrap, gold-gradient text,
+     layered shadows, cinematic hero scrim, scripture treatment
+   - Background & transition polish: rotator width tracking, richer orbs,
+     section grain, gold horizon seams on dark sections
+
+   TABLE OF CONTENTS (banner order)
+   v9 brand gradient panels → ISB aesthetic polish (v10) → Shady Side manifesto (v11)
+   → ULTIMATE DESIGN UPDATE (v12: grain, orbs, spotlight, totop)
+   → real brand logo badges → sage stats overrides → animated world map + legend
+   → AESTHETIC POLISH LAYER → BACKGROUND & TRANSITION POLISH
+
+   CASCADE POSITION
+   Second layer. Deliberately overrides 10-foundation (e.g. .hero .scrim gets the
+   left-weighted cinematic gradient, .scene gets brand gradients, scripture drops
+   its border-top). In turn 30–60 override pieces of THIS file: 30-widgets
+   relocates .totop with !important; 60-isb-unified re-declares the map pin/arc
+   keyframes and gates the arc draw on scroll.
+
+   DOM/CSS CONTRACT (JS-toggled hooks styled here)
+   - .scene.clip → .clip.shown       photo clip-wipe reveal (js/core.js clipIO, fire-once)
+   - h2.head.drawn (+.cu)            underline draw; .cu recenters it for centered
+                                     headings (js/core.js drawHead)
+   - .totop.show                     back-to-top visibility (button created by js/core.js)
+   - .spotlight                      cursor glow div created/positioned by js/core.js
+   - .rotator --rw                   width of the active rotator word, measured and
+                                     written by js/core.js so trailing text stays flush
+   - .lrow.active / .wm-svg .pin.active   legend row ↔ map pin sync (js/legend.js)
+
+   GOTCHAS
+   - section[id]{scroll-margin-top} is declared twice in this file (96px, then 84px
+     in the polish layer). The later 84px wins — keep them in this order.
+   - body::after film grain and .spotlight are disabled on mobile (≤760px) and
+     under reduced motion; don't rely on them for contrast or affordance.
+   - The world-map @keyframes here (wmping, arcdraw) are partially superseded by
+     60-isb-unified's v20 block, which re-declares arcdraw and re-times the arc
+     delays. Edit map behavior THERE, not here, or the change will be shadowed.
+   - .totop position set here (right:1.5rem) is overridden by 30-widgets with
+     !important to dodge the chat launcher — a right-side tweak here will not stick.
+
+   Edit me when… you adjust brand gradients, ambient texture (grain/orbs),
+   shimmer/sheen effects, the legend cards, or global polish shadows.
+
+   Load order matters: files are numbered and must be linked in sequence (cascade layers).
+   ──────────────────────────────────────────────────────────────────────────── */
 /* === v9: brand gradient panels replace illustrations; bg-image photos === */
   .scene{background:linear-gradient(155deg,#0a0838 0%,#1b1570 55%,#02261a 100%)}
   .scene-photo{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:1;transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}

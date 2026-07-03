@@ -1,5 +1,55 @@
-/* AnchorEd — 10-foundation.css · design tokens, base, buttons, nav, hero, core sections, footer, responsive
-   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ────────────────────────────────────────────────────────────────────────────
+   AnchorEd — 10-foundation.css
+   Design tokens, resets, base typography, and every core page component.
+
+   RESPONSIBILITIES
+   - :root design tokens (colors, fonts, --maxw/--pad/--r) that all later files consume
+   - Global reset, base element styles, .wrap container
+   - Shared primitives: .eyebrow, h2.head, .lede, .btn variants, .progress bar
+   - Core layout components: nav (+ mobile menu, sticky CTA), hero slideshow,
+     values strip, .section variants, split layout, focus grid, journey cards,
+     stories tabs, stats, beliefs, mission/vision/scripture, final CTA, contact, footer
+   - The base .reveal scroll-in mechanic and the global reduced-motion kill switch
+
+   TABLE OF CONTENTS (banner order)
+   tokens & base → eyebrow/headings → buttons → progress → nav → sticky side CTA
+   → scene → living bg → HERO with slideshow → values strip → sections → reveal
+   → intro statement → alternating split → four anchors → journey cards
+   → stories (tabbed) → stats → beliefs → mission/vision/scripture → final cta
+   → contact → footer → responsive → reduced-motion
+
+   CASCADE POSITION
+   First layer. Linked before 20–60, so ANY later file may override anything here
+   (and several do: 20 re-scrims the hero, 50 re-times .reveal, etc.).
+   This file overrides nothing — it is the baseline the others polish.
+
+   DOM/CSS CONTRACT (JS-toggled hooks styled here)
+   - .reveal → .reveal.in            fire-once scroll reveal (js/core.js observer)
+   - .reveal[data-d] + --d           per-element stagger delay; JS reads data-d,
+                                     CSS resolves calc(var(--d)*1ms)
+   - header.nav.scrolled             solid nav after 60px scroll (js/core.js)
+   - .mobile-menu.open               hamburger overlay (js/core.js)
+   - .slide.active / .slide-dots button.active   hero slideshow (js/core.js)
+   - .rotator span.on/.off           hero word rotator states (js/core.js)
+   - .tab.active / .tab-panel.active tabbed stories (js/core.js)
+   - #progress width                 written inline by js/core.js on scroll
+
+   GOTCHAS
+   - The reduced-motion block at the bottom is a GLOBAL kill switch
+     (*{animation:none!important;transition:none!important}) — any new animation
+     added anywhere must still look correct when it never runs. It also force-shows
+     .reveal and the hero copy so nothing is stuck at opacity:0.
+   - .reveal elements start at opacity:0; if the core.js observer never fires
+     (JS off), 40-loader's html.preload gating is what keeps content visible —
+     the preload class is only added when JS runs.
+   - --pad and --maxw drive the vertical/horizontal rhythm of every .section;
+     change them here, not per-section.
+
+   Edit me when… you change brand tokens, base typography, or the core layout of
+   nav/hero/sections/footer. Purely decorative polish belongs in 20+.
+
+   Load order matters: files are numbered and must be linked in sequence (cascade layers).
+   ──────────────────────────────────────────────────────────────────────────── */
 
   :root{
     --navy:#040136; --navy-2:#0b0942; --navy-3:#1b1570;
