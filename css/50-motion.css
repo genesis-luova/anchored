@@ -1,0 +1,126 @@
+/* AnchorEd — 50-motion.css · scroll choreography: craft layer, heading reveals, stats band, ledger + split feature motion
+   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ===================== CRAFT LAYER (v14): choreography, scroll-spy, finish ===================== */
+:root{--ease:cubic-bezier(.22,1,.36,1)}
+
+/* refined brand scrollbar — a small hand-crafted tell (desktop pointers only) */
+@media(hover:hover) and (pointer:fine){
+  html{scrollbar-width:thin;scrollbar-color:rgba(213,180,112,.55) transparent}
+  ::-webkit-scrollbar{width:12px;height:12px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(213,180,112,.6),rgba(151,171,137,.55));
+    border-radius:99px;border:3px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--gold),var(--gold-bright));background-clip:padding-box}
+}
+
+/* scroll-spy: the section you're reading stays lit in the nav */
+.nav-links a:not(.btn).active{opacity:1}
+.nav-links a:not(.btn).active::after{width:100%}
+header.nav.scrolled .nav-links a:not(.btn).active{opacity:1;color:var(--gold)}
+
+/* revealed cards land with a touch of spring, honoring the (now-active) --d cascade */
+.reveal{transition:opacity .9s var(--ease-isb),transform .9s var(--ease-isb)}
+.jr,.loc,.focus,.testi,.step-card,.lrow,.pcar-arrow,.btn,.socials a{transition-timing-function:var(--ease)}
+
+@media(prefers-reduced-motion:reduce){.reveal{transition:none}}
+
+/* ===================== v15: editorial heading reveals + parallax depth ===================== */
+/* Section headings emerge from a clip mask — a crafted, editorial reveal.
+   Gated on html.preload so text still shows if JS is off; triggered by the existing headIO (.drawn). */
+html.preload h2.head{clip-path:inset(0 -.14em 112% -.14em);opacity:0;transform:translateY(.42em);
+  transition:clip-path 1.05s var(--ease-isb),opacity .75s var(--ease-isb),transform 1.05s var(--ease-isb);will-change:clip-path,transform}
+html.preload h2.head.drawn{clip-path:inset(-34% -.14em -34% -.14em);opacity:1;transform:none}
+
+/* eyebrow above a heading drifts in just ahead of it for a layered feel */
+html.preload .focus-head .eyebrow,html.preload .jr-head .eyebrow,html.preload .stories-head .eyebrow,
+html.preload .belief-head .eyebrow,html.preload .believe-head .eyebrow{
+  opacity:0;transform:translateY(10px);transition:opacity .7s var(--ease),transform .8s var(--ease)}
+html.preload .reveal.in .eyebrow{opacity:1;transform:none}
+
+/* parallax focal shift needs cover sizing (already default) — keep photos steady, no edge reveal */
+.jr .scene-photo,.final .scene-photo{background-size:cover;background-position:center}
+
+@media(prefers-reduced-motion:reduce){
+  html.preload h2.head{clip-path:none;opacity:1;transform:none;transition:none}
+  html.preload .focus-head .eyebrow,html.preload .jr-head .eyebrow,html.preload .stories-head .eyebrow,
+  html.preload .belief-head .eyebrow,html.preload .believe-head .eyebrow{opacity:1;transform:none;transition:none}
+}
+
+/* ===================== v16: ISB-style "by the numbers" band ===================== */
+.stats.four{grid-template-columns:repeat(4,1fr)}
+.stats.four .stat{position:relative;padding:.4rem 1rem}
+.stats.four .stat + .stat::before{content:"";position:absolute;left:0;top:14%;bottom:14%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(4,1,54,.16),transparent)}
+.stats .n .suf{font-size:.44em;vertical-align:.55em;color:var(--gold);font-style:italic;margin-left:.06em}
+@media(max-width:900px){
+  .stats.four{grid-template-columns:repeat(2,1fr);gap:2.6rem 1rem}
+  .stats.four .stat + .stat::before{display:none}
+  .stats.four .stat:nth-child(odd)::after{content:"";position:absolute;right:-.5rem;top:14%;bottom:14%;width:1px;background:linear-gradient(180deg,transparent,rgba(4,1,54,.16),transparent)}
+}
+@media(max-width:520px){.stats.four{grid-template-columns:1fr;gap:2.4rem}.stats.four .stat:nth-child(odd)::after{display:none}}
+
+/* ===================== v18: ISB-style animated "From -> To" ledger (#transform) ===================== */
+#transform .xform-list{position:relative;counter-reset:xf;border:none;background:none;gap:0;border-radius:0;overflow:visible}
+#transform .xform-list::before{content:"";position:absolute;left:1.55rem;top:.7rem;bottom:.7rem;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(213,180,112,.45) 9%,rgba(213,180,112,.45) 91%,transparent)}
+#transform .xform{counter-increment:xf;position:relative;grid-template-columns:minmax(230px,320px) 1fr;
+  padding:1.55rem 1.6rem 1.55rem 4.3rem;background:none;border-bottom:1px solid rgba(246,242,232,.10);
+  transition:background .45s var(--ease-isb),padding-left .45s var(--ease-isb)}
+#transform .xform:last-child{border-bottom:none}
+#transform .xform::before{content:counter(xf,decimal-leading-zero);position:absolute;left:.85rem;top:1.5rem;
+  font-family:var(--serif);font-size:1.05rem;color:var(--gold);opacity:.55;background:var(--navy);padding:.2rem 0;line-height:1}
+#transform .xform:hover{background:linear-gradient(90deg,rgba(213,180,112,.12),transparent 72%);padding-left:4.8rem}
+#transform .xform:hover::before{opacity:1}
+#transform .xf-tags .arrowto{display:inline-block;transition:transform .45s var(--ease-isb)}
+#transform .xform:hover .arrowto{transform:translateX(6px)}
+#transform .xf-tags .to{transition:color .35s}
+#transform .xform:hover .to{color:var(--gold-bright)}
+/* reveal rows by sliding in from the left (ISB) rather than the default rise */
+#transform .xform.reveal{opacity:0;transform:translateX(-32px)}
+#transform .xform.reveal.in{opacity:1;transform:none}
+@media(max-width:860px){
+  #transform .xform{grid-template-columns:1fr;padding-left:3.5rem}
+  #transform .xform:hover{padding-left:3.9rem}
+  #transform .xform-list::before{left:1.25rem}
+  #transform .xform::before{left:.6rem}
+}
+@media(prefers-reduced-motion:reduce){#transform .xform.reveal{transform:none;opacity:1}}
+
+/* ===================== v19: ISB "Designed Around You" split feature (#transform intro) ===================== */
+#transform .xform-feature{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2.4rem,5vw,5rem);align-items:center;margin-bottom:clamp(3.2rem,6vw,5rem)}
+#transform .xf-visual{position:relative}
+#transform .xf-block{position:relative;background:linear-gradient(158deg,var(--gold-soft) 0%,var(--gold) 52%,#b8935a 100%);
+  border-radius:22px;padding:clamp(1.3rem,2.8vw,2.2rem);aspect-ratio:1/1.12;display:flex;align-items:flex-end;overflow:hidden;
+  box-shadow:0 44px 96px -46px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.28)}
+#transform .xf-arch{position:relative;width:100%;height:90%;border-radius:999px 999px 20px 20px;overflow:hidden;box-shadow:0 22px 52px -26px rgba(0,0,0,.6)}
+#transform .xf-arch .scene-photo{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.03);transition:transform 1.5s var(--ease-isb)}
+#transform .xf-visual:hover .xf-arch .scene-photo{transform:scale(1.1)}
+#transform .xf-arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,1,54,.03),rgba(4,1,54,.24));mix-blend-mode:multiply}
+#transform .xf-mark{position:absolute;top:clamp(.9rem,2vw,1.5rem);left:clamp(.9rem,2vw,1.5rem);width:clamp(40px,5.6vw,60px);height:auto;color:var(--navy);z-index:3;filter:drop-shadow(0 3px 10px rgba(0,0,0,.25))}
+#transform .xf-copy{position:relative}
+#transform .xf-copy .eyebrow{margin-bottom:1rem}
+#transform .xf-copy .head{margin:.4rem 0 1.15rem}
+#transform .xf-copy .lede{color:var(--on-dark-60);max-width:48ch}
+#transform .xf-jump{display:inline-flex;align-items:center;gap:.75rem;margin-top:1.9rem;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+#transform .xf-jump .arr{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(213,180,112,.5);font-size:1rem;
+  transition:transform .45s var(--ease-isb),background .3s,color .3s,border-color .3s;animation:xfbob 2.4s ease-in-out infinite}
+#transform .xf-jump:hover .arr{background:var(--gold);color:var(--navy);border-color:var(--gold);animation:none;transform:translateY(4px)}
+@keyframes xfbob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@media(max-width:860px){
+  #transform .xform-feature{grid-template-columns:1fr;gap:2.2rem}
+  #transform .xf-block{aspect-ratio:5/4;max-width:480px;margin-inline:auto;width:100%}
+  #transform .xf-arch{height:100%}
+}
+@media(prefers-reduced-motion:reduce){#transform .xf-jump .arr{animation:none}#transform .xf-visual:hover .xf-arch .scene-photo{transform:scale(1.03)}}
+
+/* ISB scroll reveal: section toggles .is-in-view; visual slides in from the left, copy staggers up (replays on scroll) */
+html.preload #transform .xf-copy h2.head{clip-path:none!important;will-change:auto}   /* let is-in-view own this heading */
+#transform .xf-visual{opacity:0;transform:translateX(-90px);transition:opacity .8s var(--ease-isb),transform .8s var(--ease-isb)}
+#transform .xf-copy>*{opacity:0;transform:translateY(80px);transition:opacity .7s var(--ease-isb),transform .7s var(--ease-isb)}
+#transform .xform-feature.is-in-view .xf-visual{opacity:1;transform:none}
+#transform .xform-feature.is-in-view .xf-copy>.eyebrow{opacity:1;transform:none;transition-delay:.12s}
+#transform .xform-feature.is-in-view .xf-copy>.head{opacity:1;transform:none;transition-delay:.26s}
+#transform .xform-feature.is-in-view .xf-copy>.lede{opacity:1;transform:none;transition-delay:.4s}
+#transform .xform-feature.is-in-view .xf-copy>.xf-jump{opacity:1;transform:none;transition-delay:.54s}
+@media(prefers-reduced-motion:reduce){#transform .xf-visual,#transform .xf-copy>*{opacity:1!important;transform:none!important;transition:none}}
+

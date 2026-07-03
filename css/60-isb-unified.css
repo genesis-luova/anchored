@@ -1,0 +1,216 @@
+/* AnchorEd — 60-isb-unified.css · unified ISB scroll/effect layer, #about intro, presence map, film frame, map appeal + clarity
+   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ================= AnchorEd × ISB — unified scroll/effect layer (v17 FINAL). Additive; append before closing style. ================= */
+
+/* ---------- (A) Directional reveal variants (opt-in; default reveal stays translateY) ----------
+   Base .reveal already resolves to --ease-isb (index.html line ~58 overrides the earlier cubic).
+   These only change the START transform. .reveal.in already resets transform:none. Kept for reuse
+   by future split/alternating layouts; NOT applied to the sage media (see note in B). */
+.reveal.rv-left{transform:translateX(-64px)}
+.reveal.rv-right{transform:translateX(64px)}
+.reveal.rv-left.in,.reveal.rv-right.in{transform:none}
+@media(prefers-reduced-motion:reduce){.reveal.rv-left,.reveal.rv-right{transform:none}}
+
+/* ---------- (B) sage heart split (.section--sage .split-media) — SINGLE source of truth ----------
+   The parallax script (index.html line ~1443) writes transform on the inner `.split-media .scene`,
+   NOT on `.split-media` itself, so animating the wrapper transform here is safe and does not fight it.
+   We do NOT add rv-right in markup — this block alone owns the wrapper slide (avoids double-spec). */
+.section--sage .split-media{opacity:0;transform:translateX(72px);transition:opacity .8s var(--ease-isb),transform .8s var(--ease-isb)}
+.section--sage .split-media.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.section--sage .split-media{opacity:1!important;transform:none!important;transition:none}}
+/* ISB arch-crop echo on the split photo */
+.section--sage .split-media .scene{border-radius:140px 140px 18px 18px}
+
+/* ---------- (C) #anchors connective chain draws downward, staggered per step ----------
+   COMPOSE with the existing translateX(-50%) (index.html line 640) so the 2px connector stays
+   centered on the 37px/29px node axis. Only add the scaleY draw + origin. */
+@media(prefers-reduced-motion:no-preference){
+  #anchors .anchor-step::before{transform:translateX(-50%) scaleY(0);transform-origin:50% 0;transition:transform .6s var(--ease-isb)}
+  #anchors .anchor-step.reveal.in::before{transform:translateX(-50%) scaleY(1)}
+  /* sequential growth mirroring the step data-d cadence (steps often cross threshold together) */
+  #anchors .anchor-step.reveal.in:nth-child(1)::before{transition-delay:.05s}
+  #anchors .anchor-step.reveal.in:nth-child(2)::before{transition-delay:.15s}
+  #anchors .anchor-step.reveal.in:nth-child(3)::before{transition-delay:.25s}
+  #anchors .anchor-step.reveal.in:nth-child(4)::before{transition-delay:.35s}
+}
+
+/* ---------- (D) #movement: gate the world-map arc-draw on scroll-in (was firing on page load) ---------- */
+@media(prefers-reduced-motion:no-preference){
+  .worldmap .wm-svg .arc{animation-play-state:paused}
+  .worldmap.in .wm-svg .arc{animation-play-state:running}
+}
+/* .mcard light staggered fade tied to the same in-view trigger */
+.worldmap .map-cards .mcard{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease-isb),transform .6s var(--ease-isb)}
+.worldmap.in .map-cards .mcard{opacity:1;transform:none}
+.worldmap.in .map-cards .mcard:nth-child(1){transition-delay:.10s}
+.worldmap.in .map-cards .mcard:nth-child(2){transition-delay:.20s}
+.worldmap.in .map-cards .mcard:nth-child(3){transition-delay:.30s}
+.worldmap.in .map-cards .mcard:nth-child(4){transition-delay:.40s}
+.worldmap.in .map-cards .mcard:nth-child(5){transition-delay:.50s}
+@media(prefers-reduced-motion:reduce){.worldmap .map-cards .mcard{opacity:1!important;transform:none!important;transition:none}}
+
+/* ---------- (E) #reach: per-stat staggered rise, driven by is-in-view (NOT the wrapper .reveal) ----------
+   The .stats.four wrapper DROPS .reveal (see markupEdits) and instead gets .is-in-view via the
+   generalized observer (JS EDIT 1). This removes the compound wrapper(30px)+child(60px) double-motion.
+   Heading (h2.head.cu) stays owned solely by headIO/.drawn — nothing here selects it. Count-up cio untouched. */
+.section--ever .stats.four .stat{opacity:0;transform:translateY(60px);transition:opacity .7s var(--ease-isb),transform .7s var(--ease-isb)}
+.section--ever .stats.four.is-in-view .stat{opacity:1;transform:none}
+.section--ever .stats.four.is-in-view .stat:nth-child(1){transition-delay:.15s}
+.section--ever .stats.four.is-in-view .stat:nth-child(2){transition-delay:.28s}
+.section--ever .stats.four.is-in-view .stat:nth-child(3){transition-delay:.41s}
+.section--ever .stats.four.is-in-view .stat:nth-child(4){transition-delay:.54s}
+@media(prefers-reduced-motion:reduce){.section--ever .stats.four .stat{opacity:1!important;transform:none!important;transition:none}}
+
+/* ---------- (F) mission/vision (.mv-grid) directional pair via is-in-view ----------
+   The two .mv-block children DROP .reveal (see markupEdits) so only is-in-view drives them.
+   Reduced-motion guard uses !important so the nth-child transforms (spec 0,2,1) cannot defeat it. */
+.mv-grid .mv-block{opacity:0;transition:opacity .7s var(--ease-isb),transform .7s var(--ease-isb)}
+.mv-grid .mv-block:nth-child(1){transform:translate(-28px,60px)}
+.mv-grid .mv-block:nth-child(2){transform:translate(28px,60px)}
+.mv-grid.is-in-view .mv-block{opacity:1;transform:none}
+.mv-grid.is-in-view .mv-block:nth-child(1){transition-delay:.12s}
+.mv-grid.is-in-view .mv-block:nth-child(2){transition-delay:.30s}
+/* scripture keeps its OWN fire-once .reveal as a separate reverent beat (not double-driven) */
+.scripture.reveal{opacity:0;transform:translateY(46px);transition:opacity .8s var(--ease-isb),transform .8s var(--ease-isb)}
+.scripture.reveal.in{opacity:1;transform:none;transition-delay:.12s}
+@media(prefers-reduced-motion:reduce){.mv-grid .mv-block,.scripture.reveal{opacity:1!important;transform:none!important;transition:none}}
+
+/* ---------- (G) #join: connective line + card hover WITHOUT clobbering the reveal fade ----------
+   .step-card is a .reveal element; its opacity/transform fade comes from the global .reveal rule.
+   The base .step-card transition below MUST keep opacity+transform at reveal timing, then add
+   box-shadow — otherwise the cards pop their opacity instantly on scroll-in. */
+.steps-grid{position:relative}
+@media(min-width:861px){
+  .steps-grid::before{content:"";position:absolute;top:2.15rem;left:16%;right:16%;height:1px;z-index:0;
+    background:linear-gradient(90deg,transparent,rgba(213,180,112,.55),transparent);opacity:0;transition:opacity .7s var(--ease-isb) .3s}
+  .steps-grid.in-line::before{opacity:1}
+}
+.step-card{position:relative;z-index:1;transition:opacity .9s var(--ease-isb),transform .45s var(--ease-isb),box-shadow .45s var(--ease-isb)}
+@media(hover:hover) and (pointer:fine){
+  .step-card:hover{transform:translateY(-6px);box-shadow:0 22px 46px -24px rgba(4,1,54,.35)}
+}
+@media(prefers-reduced-motion:reduce){.steps-grid::before{transition:none;opacity:1}.step-card{transition:none}.step-card:hover{transform:none}}
+
+/* ---------- (H) #ecosystem: card image clip-wipe on reveal (echoes .scene.clip recipe) ---------- */
+@media(prefers-reduced-motion:no-preference){
+  .jr .scene .scene-photo{clip-path:inset(0 100% 0 0);transition:clip-path 1.15s var(--ease-isb),transform 1.5s var(--ease-isb)}
+  .jr.reveal.in .scene .scene-photo{clip-path:inset(0 0 0 0)}
+}
+@media(prefers-reduced-motion:reduce){.jr .scene .scene-photo{clip-path:none}}
+
+/* ---------- (I) footer#contact: gentle upward stagger via existing .reveal (see markupEdits) ---------- */
+/* No new rules needed — .reveal + data-d on .foot-brand/.foot-col/.foot-bottom inherit the global reveal + reduced-motion guard. */
+
+/* ================= ISB 'Designed Around You'-style #about intro (v17) ================= */
+#about{scroll-margin-top:112px}
+/* Wrapper keeps BOTH classes (.believe-head .believe-feature); this id-scoped rule overrides the
+   old centered .believe-head layout (index.html line 362) so no orphaned CSS is left behind. */
+#about .believe-feature{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2.4rem,5vw,5rem);align-items:end;margin:0 0 clamp(2.8rem,5vw,4rem);text-align:left;max-width:none}
+#about .bf-intro{position:relative}
+#about .bf-intro .eyebrow{margin-bottom:1rem}
+#about .bf-intro .head{margin:.2rem 0 0}
+#about .bf-aside{position:relative;padding-bottom:.35rem}
+#about .bf-aside .lede{margin:0;color:var(--ink);opacity:.82;max-width:46ch;line-height:1.6}
+#about .bf-cue{display:inline-flex;align-items:center;gap:.75rem;margin-top:1.9rem;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+#about .bf-cue .arr{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(213,180,112,.5);font-size:1rem;color:var(--gold);transition:transform .45s var(--ease-isb),background .3s,color .3s,border-color .3s;animation:xfbob 2.4s ease-in-out infinite}
+#about .bf-cue:hover .arr{background:var(--gold);color:var(--ivory);border-color:var(--gold);animation:none;transform:translateY(4px)}
+@media(max-width:860px){
+  #about .believe-feature{grid-template-columns:1fr;gap:1.4rem;align-items:start}
+  #about .bf-aside .lede{max-width:60ch}
+}
+/* keep the left-aligned heading underline anchored LEFT even if drawHead() ever adds .cu */
+#about .bf-intro .head.cu::after{left:0;transform:none}
+/* let is-in-view own the heading, not the headIO clip-mask (same trick as #transform line 917) */
+html.preload #about .bf-intro h2.head{clip-path:none!important;will-change:auto}
+#about .bf-intro>.eyebrow,
+#about .bf-intro>.head,
+#about .bf-aside>*{opacity:0;transform:translateY(80px);transition:opacity .7s var(--ease-isb),transform .7s var(--ease-isb)}
+#about .believe-feature.is-in-view .bf-intro>.eyebrow{opacity:1;transform:none;transition-delay:.12s}
+#about .believe-feature.is-in-view .bf-intro>.head{opacity:1;transform:none;transition-delay:.26s}
+#about .believe-feature.is-in-view .bf-aside>.lede{opacity:1;transform:none;transition-delay:.40s}
+#about .believe-feature.is-in-view .bf-aside>.bf-cue{opacity:1;transform:none;transition-delay:.54s}
+@media(prefers-reduced-motion:reduce){
+  #about .bf-intro>.eyebrow,#about .bf-intro>.head,#about .bf-aside>*{opacity:1!important;transform:none!important;transition:none}
+  #about .bf-cue .arr{animation:none}
+}
+
+/* ==================== v18: global presence map dots + region list ==================== */
+.wm-svg .pin-p{fill:var(--gold);opacity:0;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 0 3px rgba(232,200,120,.7))}
+.worldmap.in .wm-svg .pin-p{animation:pinpop .6s var(--ease-isb) forwards;animation-delay:var(--dl,.3s)}
+@keyframes pinpop{0%{opacity:0;transform:scale(.2)}60%{opacity:1;transform:scale(1.3)}100%{opacity:.92;transform:scale(1)}}
+.wm-svg .pin-p:hover{fill:#fff;opacity:1}
+.presence-list{margin-top:clamp(1.9rem,3.5vw,2.8rem);display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(1rem,2vw,1.9rem)}
+.preg h4{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--evergreen);font-weight:800;margin:0 0 .85rem;padding-bottom:.55rem;border-bottom:1px solid rgba(213,180,112,.5)}
+.preg ul{list-style:none;margin:0;padding:0;display:grid;gap:.44rem}
+.preg li{display:flex;align-items:center;gap:.5rem;font-size:.88rem;color:var(--ink-60);line-height:1.25}
+.preg .pf{font-size:.98rem;line-height:1;flex:0 0 auto}
+.presence-meta{margin-top:clamp(1.6rem,3vw,2.2rem);padding-top:1.3rem;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem 1.1rem}
+.presence-meta .pm-count{font-family:var(--serif);font-style:italic;color:var(--navy);font-size:1.05rem}
+.presence-meta .pm-offices{font-size:.82rem;color:var(--ink-40);letter-spacing:.02em}
+.presence-meta .pm-offices b{color:var(--sage-deep);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.72rem;margin-right:.3rem}
+@media(max-width:980px){.presence-list{grid-template-columns:repeat(3,1fr);gap:1.4rem}}
+@media(max-width:620px){.presence-list{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){.wm-svg .pin-p{opacity:.9;animation:none}}
+
+
+/* ==================== v18: anchoring-chain film — click-to-play poster + tighter rhythm ==================== */
+.av-eyebrow{display:flex;margin:clamp(2.6rem,5vw,3.6rem) auto 1rem}
+.anchor-video{margin:0 auto}
+.av-poster{position:absolute;inset:0;width:100%;height:100%;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.05rem;background:radial-gradient(120% 120% at 50% 36%,#13104f 0%,#06023f 72%);overflow:hidden}
+.av-poster::before{content:"";position:absolute;inset:0;background:radial-gradient(42% 52% at 50% 44%,rgba(213,180,112,.2),transparent 70%);pointer-events:none}
+.av-poster .av-play{width:clamp(56px,7vw,76px);height:auto;position:relative;z-index:2;transition:transform .45s var(--ease-isb);filter:drop-shadow(0 10px 26px rgba(0,0,0,.5))}
+.av-poster:hover .av-play{transform:scale(1.08)}
+.av-poster .av-cap{position:relative;z-index:2;font-family:var(--serif);font-size:clamp(1.2rem,2.1vw,1.65rem);color:var(--ivory);letter-spacing:.01em}
+@media(prefers-reduced-motion:reduce){.av-poster:hover .av-play{transform:none}}
+
+
+/* ==================== v19: map appeal + finish polish ==================== */
+/* richer map panel: faint graticule + warm rim + vignette */
+.wm-inner::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.16;
+  background:repeating-linear-gradient(0deg,transparent 0 39px,rgba(213,180,112,.28) 39px 40px),
+             repeating-linear-gradient(90deg,transparent 0 55px,rgba(213,180,112,.22) 55px 56px)}
+.wm-inner::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 44%,transparent 55%,rgba(3,2,25,.55) 100%);
+  box-shadow:inset 0 0 0 1px rgba(213,180,112,.22),inset 0 0 60px rgba(213,180,112,.05)}
+.wm-svg{position:relative;z-index:3}
+/* extended arc cadence for the 5 new global routes */
+.wm-svg .arcs .arc:nth-child(5){animation-delay:2.5s}
+.wm-svg .arcs .arc:nth-child(6){animation-delay:2.9s}
+.wm-svg .arcs .arc:nth-child(7){animation-delay:3.3s}
+.wm-svg .arcs .arc:nth-child(8){animation-delay:3.7s}
+.wm-svg .arcs .arc:nth-child(9){animation-delay:4.1s}
+/* presence dots: gentle twinkle after they pop in */
+@media(prefers-reduced-motion:no-preference){
+  .worldmap.in .wm-svg .pin-p{animation:pinpop .6s var(--ease-isb) forwards,pintwinkle 4.2s ease-in-out calc(var(--dl,.3s) + 1.2s) infinite}
+  @keyframes pintwinkle{0%,100%{opacity:.92}50%{opacity:.5}}
+}
+/* finish polish: tactile buttons + gently living card imagery */
+.btn:active{transform:translateY(-1px) scale(.98)}
+.jr:hover .scene-photo{filter:saturate(1.08) brightness(1.04)}
+.focus:hover .scene-photo,.hover-zoom:hover .scene-photo{filter:saturate(1.06)}
+.scene-photo{will-change:transform}
+@media(prefers-reduced-motion:reduce){.jr:hover .scene-photo,.focus:hover .scene-photo,.hover-zoom:hover .scene-photo{filter:none}}
+
+
+/* ==================== v20: map clarity — bright steady dots + coherent radial network ==================== */
+/* presence dots: brighter, bigger, steady (no dimming twinkle) so all 44 read clearly */
+.wm-svg .pin-p{r:2.9px;fill:var(--gold-bright);filter:drop-shadow(0 0 3px rgba(232,200,120,1)) drop-shadow(0 0 8px rgba(232,200,120,.55))}
+.worldmap.in .wm-svg .pin-p{animation:pinpop .55s var(--ease-isb) forwards;animation-delay:var(--dl,.3s)}
+@keyframes pinpop{0%{opacity:0;transform:scale(.2)}60%{opacity:1;transform:scale(1.35)}100%{opacity:1;transform:scale(1)}}
+.wm-svg .pin-p:hover{fill:#fff;r:3.6px}
+/* office HQ cores: clearly the anchor points */
+.wm-svg .core{r:5px;fill:#fff6e0;filter:drop-shadow(0 0 7px rgba(232,200,120,1))}
+.wm-svg .ring{stroke:#e8c878;stroke-width:1.3}
+/* arcs: brighter, thicker, coherent — one network from the Middle East hub to every continent */
+.wm-svg .arc{stroke:#e8c878;stroke-width:1.35;opacity:0}
+@keyframes arcdraw{0%{stroke-dashoffset:1;opacity:0}14%{opacity:.85}100%{stroke-dashoffset:0;opacity:.72}}
+.wm-svg .arcs .arc:nth-child(1){animation-delay:.4s}
+.wm-svg .arcs .arc:nth-child(2){animation-delay:.7s}
+.wm-svg .arcs .arc:nth-child(3){animation-delay:1.0s}
+.wm-svg .arcs .arc:nth-child(4){animation-delay:1.3s}
+.wm-svg .arcs .arc:nth-child(5){animation-delay:1.6s}
+.wm-svg .arcs .arc:nth-child(6){animation-delay:1.9s}
+/* travelling pulses that show the movement flowing outward */
+.wm-svg .arc-flow{fill:#fff6e0;filter:drop-shadow(0 0 5px rgba(255,246,224,.95))}
+@media(prefers-reduced-motion:reduce){.wm-svg .arc-flow{display:none}.wm-svg .pin-p{opacity:1}}
+

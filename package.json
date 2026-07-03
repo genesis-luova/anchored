@@ -1,0 +1,9 @@
+{
+  "name": "anchored-site",
+  "private": true,
+  "description": "AnchorEd marketing site \u2014 static, zero-build, native ES modules",
+  "scripts": {
+    "dev": "python3 -m http.server 4599"
+  },
+  "type": "module"
+}

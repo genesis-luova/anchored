@@ -11,3 +11,7 @@ Thumbs.db
 # Logs / deps (not used, but safe to ignore)
 node_modules/
 *.log
+
+# Env / secrets (vercel env pull writes .env.local)
+.env
+.env*.local

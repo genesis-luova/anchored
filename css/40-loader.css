@@ -1,0 +1,51 @@
+/* AnchorEd — 40-loader.css · ISB-style page loader + cinematic hero reveal
+   Load order matters: files are numbered and must be linked in sequence (cascade layers). */
+/* ===================== ISB-STYLE PAGE LOADER + CINEMATIC REVEAL (v17) ===================== */
+:root{--ease-isb:cubic-bezier(.175,.885,.32,1.15)}
+#preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;
+  background:radial-gradient(125% 150% at 50% 26%,#0b0942 0%,#06023f 55%,#02261a 100%);
+  border:clamp(8px,1.1vw,14px) solid var(--ivory);   /* ISB signature: full-screen brand panel framed in a solid border */
+  opacity:0;visibility:hidden;transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility .9s}
+html.preload #preloader{opacity:1;visibility:visible}
+html.preload.loaded #preloader{opacity:0;visibility:hidden}
+#preloader .pl-frame{position:absolute;inset:9px;border:1px solid rgba(213,180,112,.4);pointer-events:none}
+#preloader .pl-grain{position:absolute;inset:0;opacity:.32;mix-blend-mode:soft-light;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='pn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pn)'/%3E%3C/svg%3E")}
+#preloader .pl-inner{position:relative;text-align:center;padding:2rem;max-width:min(92%,920px)}
+html.loaded #preloader .pl-inner{animation:pldrop .7s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes pldrop{to{opacity:0;transform:translateY(-14px)}}
+#preloader .pl-logo{height:clamp(34px,4.6vw,50px);width:auto;margin:0 auto 1.7rem;display:block;
+  opacity:0;transform:translateY(16px);animation:plItem .85s .05s var(--ease-isb) forwards;filter:drop-shadow(0 6px 22px rgba(0,0,0,.45))}
+#preloader .pl-eyebrow{display:block;font-size:.74rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);opacity:0;transform:translateY(14px);animation:plItem .85s .2s var(--ease-isb) forwards;margin-bottom:1.1rem}
+#preloader .pl-words{list-style:none;margin:0 0 2rem;padding:0}
+#preloader .pl-words li{font-family:var(--serif);font-weight:400;font-size:clamp(2.3rem,6.6vw,4.4rem);line-height:1.05;
+  color:var(--ivory);letter-spacing:-.012em;opacity:0;transform:translateY(42px);animation:plWord .9s var(--ease-isb) forwards}
+#preloader .pl-words li em{font-style:italic;color:var(--gold-bright)}
+#preloader .pl-words li:nth-child(1){animation-delay:.36s}
+#preloader .pl-words li:nth-child(2){animation-delay:.54s}
+#preloader .pl-words li:nth-child(3){animation-delay:.72s}
+@keyframes plItem{to{opacity:1;transform:none}}
+@keyframes plWord{to{opacity:1;transform:none}}
+#preloader .pl-track{position:relative;width:154px;height:2px;margin:0 auto;border-radius:2px;background:rgba(213,180,112,.16);overflow:hidden;
+  opacity:0;animation:plItem .8s .92s var(--ease-isb) forwards}
+#preloader .pl-track::after{content:"";position:absolute;top:0;left:-45%;width:45%;height:100%;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);animation:plsweep 1.15s cubic-bezier(.45,0,.2,1) infinite}
+@keyframes plsweep{0%{left:-48%}100%{left:104%}}
+
+/* hero content holds until the loader lifts, then rises in sequence — cinematic handoff */
+html.preload .hero .rotator-line,
+html.preload .hero h1,
+html.preload .hero p.sub,
+html.preload .hero .cta-row{animation-play-state:paused}
+html.preload.loaded .hero .rotator-line,
+html.preload.loaded .hero h1,
+html.preload.loaded .hero p.sub,
+html.preload.loaded .hero .cta-row{animation-play-state:running}
+
+@media(prefers-reduced-motion:reduce){
+  #preloader .pl-logo,#preloader .pl-eyebrow,#preloader .pl-words li,#preloader .pl-track,#preloader .pl-inner{animation:none;opacity:1;transform:none}
+  #preloader .pl-track::after{left:0;width:100%;animation:none}
+  html.preload.loaded #preloader{transition:opacity .3s,visibility .3s}
+}
+

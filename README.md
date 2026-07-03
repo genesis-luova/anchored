@@ -1,57 +1,71 @@
 # AnchorEd — Marketing Website
 
 > **Anchored in Truth. Formed for Legacy.**
-> A single-file, zero-build marketing site for AnchorEd — a faith-driven house of learning brands.
+> The marketing site for AnchorEd — a faith-driven house of learning brands.
 
-## What this is
+## Architecture
 
-A fully self-contained static website. Everything lives in **`index.html`** — all HTML, CSS, and JavaScript inline, with the AnchorEd logo and several photos embedded directly in the file. There is **no build step, no framework, and no dependencies** to install.
+Static, **zero-build**, dependency-free. Modern browsers get modularity natively — no bundler required:
+
+```
+anchored/
+├── index.html            Content markup only (semantic HTML, SEO-friendly)
+├── css/                  Stylesheets — numbered, loaded in order (cascade layers)
+│   ├── 10-foundation.css     design tokens, base, buttons, nav, hero, sections, footer
+│   ├── 20-brand-layers.css   brand gradient panels + aesthetic/background polish
+│   ├── 30-widgets.css        chat assistant, anchoring chain, steps/ledger, pillars, map cards
+│   ├── 40-loader.css         ISB-style page loader + cinematic hero reveal
+│   ├── 50-motion.css         scroll choreography: reveals, stats band, feature motion
+│   └── 60-isb-unified.css    unified scroll/effect layer, #about intro, presence map, film
+├── js/                   Native ES modules (loaded via <script type="module" src="js/main.js">)
+│   ├── main.js               entry point — imports modules in order
+│   ├── core.js               nav, reveals, counters, hero slideshow/rotator, tabs, effects
+│   ├── legend.js             location legend ↔ map pin sync
+│   ├── chat-widget.js        "Anchor" assistant (built-in KB + optional live /api/chat)
+│   ├── pillars.js            pillars carousel
+│   ├── craft.js              stagger choreography + nav scroll-spy
+│   ├── parallax.js           hero copy drift + section photo parallax
+│   ├── feature-reveal.js     ISB-style .is-in-view feature reveals
+│   └── video.js              anchoring-chain film auto-load
+├── api/
+│   └── chat.js           Vercel serverless function powering the assistant with Claude
+├── assets/
+│   ├── favicon.png
+│   └── img/              Self-hosted photography + brand marks (logos, emblems)
+├── vercel.json           Security + cache headers
+└── package.json          `npm run dev` → local server on :4599
+```
+
+Two small scripts stay intentionally inline in `index.html` (critical path):
+the `html.preload` class-setter in `<head>` and the page-loader controller —
+they must run before/independently of module loading so content can never be
+stuck behind the loader.
+
+**CSS order matters.** The numbered files are cascade layers extracted from the
+site's design evolution; always link them in sequence.
+
+## Local development
+
+```bash
+npm run dev          # serves on http://localhost:4599 (python3)
+```
+
+(Any static server works; opening `index.html` directly via `file://` will NOT
+work because ES modules require http.)
 
 ## Deploy to Vercel (via GitHub)
 
-1. Create a new repository on GitHub and push these files to it (see below).
-2. Go to [vercel.com](https://vercel.com) → **Add New → Project**.
-3. **Import** your GitHub repository.
-4. Leave all defaults (Framework Preset: **Other**). Click **Deploy**.
-5. You get a live URL in seconds. Every future `git push` to the default branch redeploys automatically.
+1. Push to GitHub; import the repo in Vercel (Framework Preset: **Other**, no build step).
+2. Optional — live AI assistant: set `ANTHROPIC_API_KEY` in Vercel → Settings →
+   Environment Variables. The widget calls `/api/chat` and falls back to its
+   built-in knowledge base automatically when the API is unavailable.
+3. Custom domain: Vercel project → **Settings → Domains** (e.g. `anchored.global`).
 
-### Pushing this folder to GitHub
+## Known follow-ups
 
-```bash
-git init
-git add .
-git commit -m "Initial commit: AnchorEd website"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
-```
-
-(Or use the GitHub web UI: create the repo, then **Add file → Upload files** and drag these in.)
-
-### Custom domain
-
-In the Vercel project, open **Settings → Domains** and add your domain (e.g. `anchored.global`). Vercel will provide the DNS records to point at it.
-
-## Local preview
-
-Just open `index.html` in any browser (double-click it). No server required.
-
-> **Note on photos:** The logo, the testimonial portraits, and the learning-block photo are embedded in the file and always render. The larger family photos load from the web (Unsplash) and Google Fonts loads the typefaces — both work on any live domain or local browser. To make the large photos permanent and on-brand, replace them with your own (see below).
-
-## Customize before launch
-
-Open `index.html` and search for these to swap in real content:
-
-- **Testimonials** — sample quotes/names in the "Stories That Connect Us" section. Search `class="testi"`.
-- **Ecosystem brand logos** — currently lettered monograms (`HG`, `V`, `EN`, …). Search `class="mono"`.
-- **Photos** — replace the `background-image` URLs (search `scene-photo`) with your own family/student photos. For guaranteed rendering everywhere, embed them as base64 data URIs.
-- **Links & contact** — CTA buttons (`#begin`, `#contact`) and the contact email (`info@anchored.global`) / social links in the footer.
-
-## Tech notes
-
-- Pure static HTML/CSS/JS — works on Vercel, Netlify, GitHub Pages, Cloudflare Pages, or any static host.
-- Responsive, with reduced-motion support and tasteful scroll/hover animations.
-- Photos use CSS `background-image` (so a blocked or missing image fails silently to a brand-colored panel — no broken-image icons).
+- The "Anchoring Chain" film is a Google Drive embed; the file must be shared
+  "Anyone with the link → Viewer" (or replaced with a self-hosted MP4/YouTube
+  source) for visitors to play it without signing in.
 
 ---
 

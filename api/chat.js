@@ -4,7 +4,7 @@
 //   1. Commit this file at api/chat.js in your repo (Vercel auto-detects it).
 //   2. In Vercel → Project → Settings → Environment Variables, add:
 //          ANTHROPIC_API_KEY = sk-ant-...   (your key from console.anthropic.com)
-//   3. In index.html, find:  var ANCHOR_API='';   →  change to:  var ANCHOR_API='/api/chat';
+//   3. js/chat-widget.js already sets  var ANCHOR_API='/api/chat'  — no change needed.
 //   4. Redeploy. Anchor now answers with live Claude, falling back to the built-in
 //      knowledge base automatically if the API is ever unavailable.
 
