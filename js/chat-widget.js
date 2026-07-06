@@ -62,12 +62,12 @@
      c:['Our programs','Where you\u2019re located','How to enroll']},
     {k:['homeschool global'],a:"Homeschool Global is our flagship program \u2014 personalized, flexible, values-based homeschooling for Nursery through Grade 12. It\u2019s parent-guided, with a worldwide community behind every family. Would you like to know how to enroll?",c:['How to enroll','Other programs']},
     {k:['vcis','victory','christian international','servant leader'],a:"VCIS (Victory Christian International School) raises servant leaders through a top-tier virtual campus \u2014 full online learning for Pre-K through Grade 12. Want details on getting started?",c:['How to enroll','Other programs']},
-    {k:['edunova','edu nova'],a:"EduNova offers affordable, accessible, holistic education for Kinder through Grade 12, with a flexible mix of homeschooling, online, and in-person learning. Shall I point you to enrollment?",c:['How to enroll','Other programs']},
+    {k:['edunova','edu nova','in-person','in person','face to face','face-to-face','physical','hybrid'],a:"EduNova offers affordable, accessible, holistic education for Kinder through Grade 12, with a flexible mix of homeschooling, online, and in-person learning. Shall I point you to enrollment?",c:['How to enroll','Other programs']},
     {k:['homeschool pilipinas','homeschool philippines','nation-builder','nation builder','filipino'],a:"Homeschool Pilipinas cultivates Filipino nation-builders through foundational learning and character formation, for Kinder through Grade 10. Want to know more about joining?",c:['How to enroll','Other programs']},
     {k:['learning plus','learning+','books','book','resource','curriculum','material','reading'],a:"Learning Plus curates the world\u2019s best books and educational resources to help families cultivate a lifelong love of learning and teaching. Looking for something in particular?",c:['Our programs','Talk to the team']},
     {k:['learning hub','co-learning','co learning','colearning','community'],a:"The Learning Hub is a community co-learning environment where families connect, collaborate, and experience transformative learning together. Want to know how to be part of it?",c:['How to enroll','Our programs']},
     {k:['everlearn','printed','printing','print','publisher','provider'],a:"Everlearn Technologies powers education providers through high-quality printed books and learning materials. Are you an educator or provider? I can connect you with our team.",c:['Talk to the team','Our programs']},
-    {k:['program','programs','brand','brands','ecosystem','school','schools','option','options','offer','services','course'],a:"AnchorEd is a family of seven learning brands \u2014 one for every stage of your journey:\n\u2022 Homeschool Global \u2014 flexible homeschooling (Nursery\u2013G12)\n\u2022 VCIS \u2014 online Christian school (Pre-K\u2013G12)\n\u2022 EduNova \u2014 affordable hybrid education (Kinder\u2013G12)\n\u2022 Homeschool Pilipinas \u2014 character-first homeschooling (Kinder\u2013G10)\n\u2022 Learning Plus \u2014 books & resources\n\u2022 The Learning Hub \u2014 co-learning community\n\u2022 Everlearn \u2014 printed learning materials\nWhich one sounds right for your family?",c:['Homeschool Global','VCIS','EduNova','How to enroll']},
+    {k:['program','programs','brand','brands','ecosystem','school','schools','option','options','offer','services','course','compare','comparison','difference','which one','which program','recommend','best fit','best for','right for','right program','see all'],a:"AnchorEd is a family of seven learning brands \u2014 one for every stage of your journey:\n\u2022 Homeschool Global \u2014 flexible homeschooling (Nursery\u2013G12)\n\u2022 VCIS \u2014 online Christian school (Pre-K\u2013G12)\n\u2022 EduNova \u2014 affordable hybrid education (Kinder\u2013G12)\n\u2022 Homeschool Pilipinas \u2014 character-first homeschooling (Kinder\u2013G10)\n\u2022 Learning Plus \u2014 books & resources\n\u2022 The Learning Hub \u2014 co-learning community\n\u2022 Everlearn \u2014 printed learning materials\nWhich one sounds right for your family?",c:['Homeschool Global','VCIS','EduNova','How to enroll']},
     {k:['grade','grades','age','old','year level','kinder','kindergarten','nursery','high school','elementary','preschool','pre-k','prek','toddler'],a:"We cover every stage \u2014 from Nursery and Pre-K all the way to Grade 12. Homeschool Global runs Nursery\u2013G12, VCIS and EduNova go Pre-K/Kinder\u2013G12, and Homeschool Pilipinas covers Kinder\u2013G10. If you tell me your child\u2019s grade, I can suggest the best fit!",c:['Our programs','How to enroll']},
     {k:['online','virtual','distance','remote','from home','internet'],a:"Yes! VCIS is our fully online Christian school (Pre-K\u2013G12), and EduNova offers online and hybrid options. Homeschool Global is parent-guided with rich digital support too. Want me to walk you through enrollment?",c:['How to enroll','Our programs']},
     {k:['homeschool','home school','home-school','how does it work','how it works','parent-led','parent led'],a:"Homeschooling with AnchorEd is parent-led but never alone \u2014 you get a structured curriculum, guidance, and a worldwide community. Homeschool Global (Nursery\u2013G12) and Homeschool Pilipinas (Kinder\u2013G10) are built for exactly this. Would you like to start?",c:['How to enroll','Our approach']},
@@ -84,15 +84,56 @@
   // Served when no KB entry scores > 0 — always redirects to the human team.
   var FALLBACK={a:"That\u2019s a wonderful question. I may not have every detail, but our team certainly will \u2014 reach them at info@anchored.global. In the meantime, I can tell you about our programs, locations, or how to get started. What sounds helpful?",c:['Our programs','Where you\u2019re located','How to enroll']};
 
+  /* ── stage (grade/age) detection — the "smart" upsell ───────────────────
+     When a visitor mentions a grade, age, or early stage, we recommend the
+     brands whose level range actually covers that child instead of a generic
+     answer. Brand ranges (internal grade numbers: Nursery=-2, Pre-K=-1, K=0):
+       Homeschool Global  Nursery(-2)..12   VCIS  Pre-K(-1)..12
+       EduNova  Kinder(0)..12               Homeschool Pilipinas  Kinder(0)..10 */
+  function detectStage(q){
+    var grade=null;
+    var m=q.match(/\bgrade\s*(\d{1,2})\b/)||q.match(/\bg\s*(\d{1,2})\b/)||q.match(/\b(\d{1,2})\s*(?:st|nd|rd|th)?\s*grade\b/);
+    if(m)grade=parseInt(m[1],10);
+    var am=q.match(/\b(\d{1,2})\s*(?:years?|yrs?|yo)\s*old\b/)||q.match(/\bage\s*(?:of\s*)?(\d{1,2})\b/);
+    var age=am?parseInt(am[1],10):null;
+    if(grade===null&&age!==null)grade=age-5;            // age 5≈K, 6≈G1, …
+    if(/\bnursery\b/.test(q))grade=-2;
+    else if(/\bpre ?k\b|\bprek\b|\bpre kinder\b|\bpreschool\b|\btoddler\b/.test(q))grade=-1;   // norm() turns "pre-k" into "pre k"
+    else if(/\b(?:kinder|kindergarten|kg)\b/.test(q))grade=0;
+    if(grade!==null&&(grade<-2||grade>12))grade=null;   // out of range → ignore
+    return {grade:grade,age:age};
+  }
+  function stageLabel(g){return g===-2?'Nursery':g===-1?'Pre-K':g===0?'Kindergarten':'Grade '+g;}
+  function recommendByStage(st){
+    var g=st.grade;if(g===null)return null;
+    var fits=[];
+    if(g>=-2&&g<=12)fits.push('Homeschool Global — flexible, values-based homeschooling');
+    if(g>=-1&&g<=12)fits.push('VCIS — fully online Christian school');
+    if(g>=0&&g<=12)fits.push('EduNova — affordable homeschool / online / in-person hybrid');
+    if(g>=0&&g<=10)fits.push('Homeschool Pilipinas — character-first homeschooling');
+    if(!fits.length)return null;
+    return {a:"For "+stageLabel(g)+", these programs fit your child:\n• "+fits.join('\n• ')+"\nWould you prefer fully online, homeschooling at your own pace, or in-person? Tell me and I’ll narrow it down — or I can share how to enroll.",
+            c:['See all programs','Fully online','How to enroll']};
+  }
+
   /* ── KB matching ────────────────────────────────────────────────────────
      norm() lowercases, strips punctuation (keeping '+' for 'learning+') and
      pads with spaces so \b-style checks work at string edges.
      score(): keywords ≤3 chars need a whole-word match (+2); longer keywords
      match as substrings, weighted +3 when >6 chars (more specific = stronger
-     signal). Highest-scoring entry wins; zero total falls through to FALLBACK. */
+     signal). A small phrase bonus rewards multi-word keyword hits ("homeschool
+     global" beats a lone "global"). Highest score wins; zero falls to FALLBACK,
+     but a grade/age mention short-circuits to a tailored recommendation. */
   function norm(s){return ' '+String(s).toLowerCase().replace(/[^\w\s+]/g,' ').replace(/\s+/g,' ').trim()+' ';}
-  function score(q,kws){var s=0;for(var i=0;i<kws.length;i++){var k=kws[i];if(k.length<=3){if(new RegExp('\\b'+k.replace('+','\\+')+'\\b').test(q))s+=2;}else if(q.indexOf(k)>=0){s+=(k.length>6?3:2);}}return s;}
-  function matchKB(t){var q=norm(t),best=null,bs=0;for(var i=0;i<KB.length;i++){var sc=score(q,KB[i].k);if(sc>bs){bs=sc;best=KB[i];}}return bs>0?best:FALLBACK;}
+  function score(q,kws){var s=0;for(var i=0;i<kws.length;i++){var k=kws[i];if(k.length<=3){if(new RegExp('\\b'+k.replace('+','\\+')+'\\b').test(q))s+=2;}else if(q.indexOf(' '+k+' ')>=0){s+=(k.length>6?4:3);}else if(q.indexOf(k)>=0){s+=(k.length>6?3:2);}}return s;}
+  function matchKB(t){
+    var q=norm(t);
+    var rec=recommendByStage(detectStage(q));   // grade/age-aware answer wins when present
+    if(rec)return rec;
+    var best=null,bs=0;
+    for(var i=0;i<KB.length;i++){var sc=score(q,KB[i].k);if(sc>bs){bs=sc;best=KB[i];}}
+    return bs>0?best:FALLBACK;
+  }
 
   /* ── DOM handles & state ──────────────────────────────────────────────── */
   var root=document.getElementById('anchorChat'),launcher=document.getElementById('anchorLauncher'),

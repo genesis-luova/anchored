@@ -20,8 +20,7 @@ anchored/
 ├── js/                   Native ES modules (loaded via <script type="module" src="js/main.js">)
 │   ├── main.js               entry point — imports modules in order
 │   ├── core.js               nav, reveals, counters, hero slideshow/rotator, tabs, effects
-│   ├── legend.js             location legend ↔ map pin sync
-│   ├── chat-widget.js        "Anchor" assistant (built-in KB + optional live /api/chat)
+│   ├── chat-widget.js        "Anchor" assistant — grade-aware KB + optional live /api/chat
 │   ├── pillars.js            pillars carousel
 │   ├── craft.js              stagger choreography + nav scroll-spy
 │   ├── parallax.js           hero copy drift + section photo parallax

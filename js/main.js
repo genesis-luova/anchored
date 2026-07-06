@@ -29,7 +29,6 @@
    anything it depends on (in practice: last).
    ────────────────────────────────────────────────────────────────────────── */
 import './core.js';
-import './legend.js';
 import './chat-widget.js';
 import './pillars.js';
 import './craft.js';
