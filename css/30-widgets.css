@@ -260,5 +260,11 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
 }
 @media(max-width:480px){.map-cards{grid-template-columns:1fr}}
 
-.anchor-node img.anchor-ic{width:74%;height:74%;object-fit:contain;display:block}
+/* Icon rests slightly dimmed, then lights up warmly when its step is hovered. */
+.anchor-node img.anchor-ic{width:74%;height:74%;object-fit:contain;display:block;
+  opacity:.62;filter:brightness(.9) saturate(.9);
+  transition:opacity .45s var(--ease-isb),filter .45s var(--ease-isb)}
+.anchor-step:hover .anchor-ic{opacity:1;
+  filter:brightness(1.18) saturate(1.1) drop-shadow(0 0 8px rgba(232,200,120,.55))}
+@media(prefers-reduced-motion:reduce){.anchor-node img.anchor-ic{transition:none}}
 
