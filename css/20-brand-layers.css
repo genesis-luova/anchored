@@ -69,6 +69,19 @@
   .jr .scene{background:linear-gradient(160deg,#0a0838,#1b1570 60%,#02261a)}
   .hero h1 em{background:linear-gradient(100deg,var(--gold-soft) 28%,#fff7e4 50%,var(--gold-soft) 72%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:shine 5.5s linear infinite}
   @keyframes shine{to{background-position:-200% center}}
+  /* .flash — a bright light-streak sweeps across a gold phrase, then rests (lightning-glint highlight).
+     Two clipped layers: a solid gold base (text is always gold) + a white streak that crosses once per cycle. */
+  h2.head em.flash{
+    background:
+      linear-gradient(100deg,transparent 42%,rgba(255,250,236,.95) 50%,transparent 58%) 200% 0 / 220% 100% no-repeat,
+      linear-gradient(var(--gold),var(--gold));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+    animation:goldflash 4.2s ease-in-out infinite}
+  .section--navy h2.head em.flash,.section--ever h2.head em.flash{background:
+      linear-gradient(100deg,transparent 42%,rgba(255,255,255,.95) 50%,transparent 58%) 200% 0 / 220% 100% no-repeat,
+      linear-gradient(var(--gold-soft),var(--gold-soft));-webkit-background-clip:text;background-clip:text}
+  @keyframes goldflash{0%{background-position:200% 0,0 0}24%{background-position:-120% 0,0 0}100%{background-position:-120% 0,0 0}}
+  @media(prefers-reduced-motion:reduce){h2.head em.flash{animation:none;background:none;color:var(--gold);-webkit-text-fill-color:var(--gold)}}
   .focus::after,.jr::after{content:"";position:absolute;top:0;left:-130%;width:55%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.16),transparent);transform:skewX(-18deg);transition:left .7s;pointer-events:none;z-index:6}
   .focus:hover::after,.jr:hover::after{left:150%}
   .jr,.loc{will-change:transform}
