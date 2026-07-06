@@ -147,7 +147,7 @@ html.preload .reveal.in .eyebrow{opacity:1;transform:none}
 #transform .xf-arch .scene-photo{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.03);transition:transform 1.5s var(--ease-isb)}
 #transform .xf-visual:hover .xf-arch .scene-photo{transform:scale(1.1)}
 #transform .xf-arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,1,54,.03),rgba(4,1,54,.24));mix-blend-mode:multiply}
-#transform .xf-mark{position:absolute;top:clamp(.9rem,2vw,1.5rem);left:clamp(.9rem,2vw,1.5rem);width:clamp(40px,5.6vw,60px);height:auto;color:var(--navy);z-index:3;filter:drop-shadow(0 3px 10px rgba(0,0,0,.25))}
+#transform .xf-mark{position:absolute;top:clamp(.9rem,2vw,1.5rem);left:clamp(.9rem,2vw,1.5rem);width:clamp(44px,6vw,66px);height:auto;z-index:3;filter:drop-shadow(0 3px 10px rgba(0,0,0,.3))}
 #transform .xf-copy{position:relative}
 #transform .xf-copy .eyebrow{margin-bottom:1rem}
 #transform .xf-copy .head{margin:.4rem 0 1.15rem}
