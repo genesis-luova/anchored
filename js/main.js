@@ -36,3 +36,4 @@ import './parallax.js';
 import './feature-reveal.js';
 import './video.js';
 import './shift-cards.js';
+import './brand-carousel.js';

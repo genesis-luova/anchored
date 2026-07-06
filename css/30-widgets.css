@@ -258,3 +258,48 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
   filter:brightness(1.18) saturate(1.1) drop-shadow(0 0 8px rgba(232,200,120,.55))}
 @media(prefers-reduced-motion:reduce){.anchor-node img.anchor-ic{transition:none}}
 
+
+/* ===================== v23: brand coverflow carousel (#ecosystem) =====================
+   Center-mode carousel: the focused brand card sits full-size and centered while its
+   neighbours scale back, dim and tilt in 3D (coverflow). js/brand-carousel.js sets
+   .is-focus/.is-prev/.is-next and translates .bcar-track to centre the active card. The
+   cards keep their grid-era .jr styling; the rules below only neutralise the grid hover
+   lift and the reveal clip-path so cards render correctly inside the moving track. */
+.bcar{position:relative;margin-top:clamp(2.2rem,4.5vw,3.2rem)}
+.bcar-viewport{overflow:hidden;padding:2.4rem 0 2.6rem}
+.bcar-track{display:flex;gap:clamp(1rem,2vw,1.6rem);will-change:transform;transition:transform .8s var(--ease-isb)}
+.bslide{flex:0 0 clamp(280px,29vw,358px);cursor:pointer;
+  opacity:.38;transform:perspective(1250px) scale(.8);
+  transition:transform .75s var(--ease-isb),opacity .75s var(--ease-isb)}
+.bslide.is-prev{opacity:.62;transform:perspective(1250px) rotateY(20deg) scale(.85)}
+.bslide.is-next{opacity:.62;transform:perspective(1250px) rotateY(-20deg) scale(.85)}
+.bslide.is-focus{opacity:1;transform:perspective(1250px) rotateY(0) scale(1);cursor:default;z-index:2}
+.bcar .jr{height:100%}
+.bcar .jr:hover{transform:none}
+.bcar .bslide.is-focus .jr:hover{box-shadow:var(--sh-lift)}
+.bcar .jr .scene .scene-photo{clip-path:none!important}
+/* arrows */
+.bcar-arrow{position:absolute;top:calc(50% - .8rem);transform:translateY(-50%);z-index:6;
+  width:clamp(44px,4vw,54px);height:clamp(44px,4vw,54px);border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.92);color:var(--navy);border:1px solid rgba(4,1,54,.08);
+  box-shadow:0 14px 32px -12px rgba(4,1,54,.34);cursor:pointer;
+  transition:transform .35s var(--ease-isb),background .3s,color .3s,opacity .3s}
+.bcar-arrow:hover{background:var(--navy);color:var(--ivory);transform:translateY(-50%) scale(1.09)}
+.bcar-prev{left:clamp(.2rem,2vw,1.2rem)}
+.bcar-next{right:clamp(.2rem,2vw,1.2rem)}
+.bcar-arrow:disabled{opacity:.26;pointer-events:none}
+/* dots */
+.bcar-dots{display:flex;justify-content:center;gap:.55rem;margin-top:.4rem}
+.bcar-dot{width:9px;height:9px;border-radius:50%;border:none;padding:0;cursor:pointer;
+  background:rgba(4,1,54,.18);transition:transform .35s var(--ease-isb),background .3s}
+.bcar-dot:hover{background:rgba(4,1,54,.42)}
+.bcar-dot.is-active{background:var(--gold);transform:scale(1.4)}
+@media(max-width:600px){
+  .bslide{flex-basis:80vw}
+  .bcar-arrow{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .bcar-track{transition:none}
+  .bslide,.bslide.is-prev,.bslide.is-next,.bslide.is-focus{transform:none!important;transition:opacity .25s}
+}
+
