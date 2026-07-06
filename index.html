@@ -306,26 +306,74 @@
     </div>
   </div>
   <div class="wrap">
-    <div class="xform-list" id="xform-shifts">
-      <div class="xform reveal" data-d="40">
-        <div class="xf-tags"><span class="xf-label">From</span><span class="from">Overwhelmed</span><span class="arrowto">→</span><span class="to">Confident</span></div>
-        <p>Navigate parenting, educational, and life decisions with greater clarity and confidence.</p>
+    <!-- "See the shifts": each card rests on the FROM (the struggle) and flips to
+         reveal the TO (the transformation) + detail. Cards auto-peek as they scroll
+         in (js/shift-cards.js) and flip on hover (desktop) / tap (touch). -->
+    <div class="shift-grid" id="xform-shifts">
+      <div class="shift reveal" data-d="40" tabindex="0" role="button" aria-label="From Overwhelmed to Confident">
+        <div class="shift-inner">
+          <div class="shift-face shift-front">
+            <span class="shift-num">01</span><span class="shift-lab">From</span>
+            <span class="shift-word from">Overwhelmed</span>
+            <span class="shift-hint">See the shift <span class="sh-a">→</span></span>
+          </div>
+          <div class="shift-face shift-back">
+            <span class="shift-lab to-lab">To</span><span class="shift-word to">Confident</span>
+            <p>Navigate parenting, educational, and life decisions with greater clarity and confidence.</p>
+          </div>
+        </div>
       </div>
-      <div class="xform reveal" data-d="110">
-        <div class="xf-tags"><span class="xf-label">From</span><span class="from">Information</span><span class="arrowto">→</span><span class="to">Formation</span></div>
-        <p>Move beyond helping children acquire knowledge, and intentionally nurture character, wisdom, and purpose.</p>
+      <div class="shift reveal" data-d="110" tabindex="0" role="button" aria-label="From Information to Formation">
+        <div class="shift-inner">
+          <div class="shift-face shift-front">
+            <span class="shift-num">02</span><span class="shift-lab">From</span>
+            <span class="shift-word from">Information</span>
+            <span class="shift-hint">See the shift <span class="sh-a">→</span></span>
+          </div>
+          <div class="shift-face shift-back">
+            <span class="shift-lab to-lab">To</span><span class="shift-word to">Formation</span>
+            <p>Move beyond helping children acquire knowledge, and intentionally nurture character, wisdom, and purpose.</p>
+          </div>
+        </div>
       </div>
-      <div class="xform reveal" data-d="180">
-        <div class="xf-tags"><span class="xf-label">From</span><span class="from">Disconnected</span><span class="arrowto">→</span><span class="to">Aligned</span></div>
-        <p>Create greater harmony between home, learning, relationships, and what matters most.</p>
+      <div class="shift reveal" data-d="180" tabindex="0" role="button" aria-label="From Disconnected to Aligned">
+        <div class="shift-inner">
+          <div class="shift-face shift-front">
+            <span class="shift-num">03</span><span class="shift-lab">From</span>
+            <span class="shift-word from">Disconnected</span>
+            <span class="shift-hint">See the shift <span class="sh-a">→</span></span>
+          </div>
+          <div class="shift-face shift-back">
+            <span class="shift-lab to-lab">To</span><span class="shift-word to">Aligned</span>
+            <p>Create greater harmony between home, learning, relationships, and what matters most.</p>
+          </div>
+        </div>
       </div>
-      <div class="xform reveal" data-d="250">
-        <div class="xf-tags"><span class="xf-label">From</span><span class="from">Going It Alone</span><span class="arrowto">→</span><span class="to">Belonging</span></div>
-        <p>Become part of a community committed to growth, support, and flourishing.</p>
+      <div class="shift reveal" data-d="250" tabindex="0" role="button" aria-label="From Going It Alone to Belonging">
+        <div class="shift-inner">
+          <div class="shift-face shift-front">
+            <span class="shift-num">04</span><span class="shift-lab">From</span>
+            <span class="shift-word from">Going It Alone</span>
+            <span class="shift-hint">See the shift <span class="sh-a">→</span></span>
+          </div>
+          <div class="shift-face shift-back">
+            <span class="shift-lab to-lab">To</span><span class="shift-word to">Belonging</span>
+            <p>Become part of a community committed to growth, support, and flourishing.</p>
+          </div>
+        </div>
       </div>
-      <div class="xform reveal" data-d="320">
-        <div class="xf-tags"><span class="xf-label">From</span><span class="from">Raising Children</span><span class="arrowto">→</span><span class="to">Shaping Generations</span></div>
-        <p>Build a family culture that influences lives long beyond today.</p>
+      <div class="shift reveal" data-d="320" tabindex="0" role="button" aria-label="From Raising Children to Shaping Generations">
+        <div class="shift-inner">
+          <div class="shift-face shift-front">
+            <span class="shift-num">05</span><span class="shift-lab">From</span>
+            <span class="shift-word from">Raising Children</span>
+            <span class="shift-hint">See the shift <span class="sh-a">→</span></span>
+          </div>
+          <div class="shift-face shift-back">
+            <span class="shift-lab to-lab">To</span><span class="shift-word to">Shaping Generations</span>
+            <p>Build a family culture that influences lives long beyond today.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

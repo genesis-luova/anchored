@@ -35,3 +35,4 @@ import './craft.js';
 import './parallax.js';
 import './feature-reveal.js';
 import './video.js';
+import './shift-cards.js';
