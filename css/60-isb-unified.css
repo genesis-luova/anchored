@@ -274,20 +274,23 @@ html.preload #about .bf-intro h2.head{clip-path:none!important;will-change:auto}
 
 
 /* ==================== 7/03 client revision layer ====================
-   Source: client feedback sheet, tab 7/03 (2026-07-03).
-   - Original (navy+gold) logo everywhere: over the dark hero the nav brand sits
-     on an ivory chip so it never blends into the slideshow (row 5); the chip
-     dissolves once the nav gains its ivory scrolled bar. Footer gets the same
-     chip treatment on navy (row 27).
+   Source: client feedback sheet, tab 7/03 (2026-07-03), amended 2026-07-06.
+   - Logo: the ORIGINAL AnchorEd logo (client's file) with the earlier elegant
+     swap restored (no ivory chip): a cream+gold version drops over the dark
+     hero and CROSSFADES to the navy+gold version once the nav gains its ivory
+     scrolled bar. Both logo images are the same 800x208 artwork so they stack
+     and align perfectly. logo-original-light.png = navy recoloured to ivory,
+     gold preserved (generated from logo-original.png).
    - "The Parenting Dilemma": cream, muted, deliberately sober palette (row 11).
    - Everlearn card centered in the ecosystem grid (row 19). */
-.brand{display:inline-flex;align-items:center;background:rgba(247,243,234,.94);
-  padding:.42rem .8rem;border-radius:12px;box-shadow:0 8px 24px -12px rgba(4,1,54,.45);
-  transition:background .4s,box-shadow .4s,padding .4s}
-.brand .logo-og{height:38px;width:auto;display:block;filter:none}
-header.nav.scrolled .brand{background:transparent;box-shadow:none;padding:.42rem 0}
-.foot-logo-og{height:44px;width:auto;background:rgba(247,243,234,.95);
-  padding:.5rem .85rem;border-radius:12px;box-sizing:content-box;margin-bottom:1.2rem}
+.brand{position:relative;display:inline-block;line-height:0;background:none;box-shadow:none;padding:0}
+.brand img{height:38px;width:auto;display:block;transition:opacity .45s ease}
+.brand .logo-light{filter:drop-shadow(0 2px 12px rgba(0,0,0,.4))}
+.brand .logo-navy{display:block;position:absolute;top:0;left:0;opacity:0;filter:none}
+header.nav.scrolled .brand{background:none;box-shadow:none;padding:0}
+header.nav.scrolled .brand .logo-light{display:block;opacity:0}
+header.nav.scrolled .brand .logo-navy{opacity:1}
+.foot-logo{height:44px;width:auto;margin-bottom:1.2rem;filter:drop-shadow(0 2px 10px rgba(0,0,0,.3))}
 
 /* Parenting Dilemma — cream + subdued ("sad", not rich) */
 .problem-sec{background:linear-gradient(180deg,#f2ecdd 0%,#e9e1cd 100%);color:var(--ink)}
