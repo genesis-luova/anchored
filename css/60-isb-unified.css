@@ -159,36 +159,33 @@
 /* ---------- (I) footer#contact: gentle upward stagger via existing .reveal (see markupEdits) ---------- */
 /* No new rules needed — .reveal + data-d on .foot-brand/.foot-col/.foot-bottom inherit the global reveal + reduced-motion guard. */
 
-/* ================= ISB 'Designed Around You'-style #about intro (v17) ================= */
+/* ================= #about intro — centered editorial statement (v21) =================
+   The marketing edit (build tab 07/03, row 22) removed the supporting paragraph,
+   which had left the old two-column grid with a lone cue stranded in the right
+   column (a large empty top-right). Recompose as ONE centered "belief" statement
+   with the cue beneath it: no dead column, balanced whitespace, right-sized type
+   (the statement is a sentence, so it reads smaller than a short headline would). */
 #about{scroll-margin-top:112px}
-/* Wrapper keeps BOTH classes (.believe-head .believe-feature); this id-scoped rule overrides the
-   old centered .believe-head layout (index.html line 362) so no orphaned CSS is left behind. */
-#about .believe-feature{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2.4rem,5vw,5rem);align-items:end;margin:0 0 clamp(2.8rem,5vw,4rem);text-align:left;max-width:none}
-#about .bf-intro{position:relative}
-#about .bf-intro .eyebrow{margin-bottom:1rem}
-#about .bf-intro .head{margin:.2rem 0 0}
-#about .bf-aside{position:relative;padding-bottom:.35rem}
-#about .bf-aside .lede{margin:0;color:var(--ink);opacity:.82;max-width:46ch;line-height:1.6}
-#about .bf-cue{display:inline-flex;align-items:center;gap:.75rem;margin-top:1.9rem;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+#about .believe-feature{display:block;text-align:center;max-width:min(92%,980px);margin:0 auto clamp(3rem,6vw,4.6rem)}
+#about .bf-intro .eyebrow{justify-content:center;margin-bottom:1.3rem}
+#about .bf-intro .eyebrow::before{display:none}   /* centered eyebrow: drop the leading rule */
+#about .bf-intro .head{margin:0 auto;max-width:24ch;font-size:clamp(1.85rem,3.9vw,3.2rem);line-height:1.16;letter-spacing:-.01em}
+#about .bf-intro .head::after{left:50%;transform:translateX(-50%)}   /* centre the gold underline */
+#about .bf-aside{margin-top:clamp(1.6rem,3vw,2.2rem)}
+#about .bf-cue{display:inline-flex;align-items:center;gap:.75rem;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none}
 #about .bf-cue .arr{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(213,180,112,.5);font-size:1rem;color:var(--gold);transition:transform .45s var(--ease-isb),background .3s,color .3s,border-color .3s;animation:xfbob 2.4s ease-in-out infinite}
 #about .bf-cue:hover .arr{background:var(--gold);color:var(--ivory);border-color:var(--gold);animation:none;transform:translateY(4px)}
-@media(max-width:860px){
-  #about .believe-feature{grid-template-columns:1fr;gap:1.4rem;align-items:start}
-  #about .bf-aside .lede{max-width:60ch}
-}
-/* keep the left-aligned heading underline anchored LEFT even if drawHead() ever adds .cu */
-#about .bf-intro .head.cu::after{left:0;transform:none}
-/* let is-in-view own the heading, not the headIO clip-mask (same trick as #transform line 917) */
+@media(max-width:560px){#about .bf-intro .head{max-width:18ch}}
+/* let is-in-view own the heading, not the headIO clip-mask (same trick as #transform) */
 html.preload #about .bf-intro h2.head{clip-path:none!important;will-change:auto}
 #about .bf-intro>.eyebrow,
 #about .bf-intro>.head,
-#about .bf-aside>*{opacity:0;transform:translateY(80px);transition:opacity .7s var(--ease-isb),transform .7s var(--ease-isb)}
-#about .believe-feature.is-in-view .bf-intro>.eyebrow{opacity:1;transform:none;transition-delay:.12s}
-#about .believe-feature.is-in-view .bf-intro>.head{opacity:1;transform:none;transition-delay:.26s}
-#about .believe-feature.is-in-view .bf-aside>.lede{opacity:1;transform:none;transition-delay:.40s}
-#about .believe-feature.is-in-view .bf-aside>.bf-cue{opacity:1;transform:none;transition-delay:.54s}
+#about .bf-aside>.bf-cue{opacity:0;transform:translateY(40px);transition:opacity .7s var(--ease-isb),transform .7s var(--ease-isb)}
+#about .believe-feature.is-in-view .bf-intro>.eyebrow{opacity:1;transform:none;transition-delay:.1s}
+#about .believe-feature.is-in-view .bf-intro>.head{opacity:1;transform:none;transition-delay:.24s}
+#about .believe-feature.is-in-view .bf-aside>.bf-cue{opacity:1;transform:none;transition-delay:.42s}
 @media(prefers-reduced-motion:reduce){
-  #about .bf-intro>.eyebrow,#about .bf-intro>.head,#about .bf-aside>*{opacity:1!important;transform:none!important;transition:none}
+  #about .bf-intro>.eyebrow,#about .bf-intro>.head,#about .bf-aside>.bf-cue{opacity:1!important;transform:none!important;transition:none}
   #about .bf-cue .arr{animation:none}
 }
 
