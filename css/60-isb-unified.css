@@ -272,3 +272,30 @@ html.preload #about .bf-intro h2.head{clip-path:none!important;will-change:auto}
 .wm-svg .arc-flow{fill:#fff6e0;filter:drop-shadow(0 0 5px rgba(255,246,224,.95))}
 @media(prefers-reduced-motion:reduce){.wm-svg .arc-flow{display:none}.wm-svg .pin-p{opacity:1}}
 
+
+/* ==================== 7/03 client revision layer ====================
+   Source: client feedback sheet, tab 7/03 (2026-07-03).
+   - Original (navy+gold) logo everywhere: over the dark hero the nav brand sits
+     on an ivory chip so it never blends into the slideshow (row 5); the chip
+     dissolves once the nav gains its ivory scrolled bar. Footer gets the same
+     chip treatment on navy (row 27).
+   - "The Parenting Dilemma": cream, muted, deliberately sober palette (row 11).
+   - Everlearn card centered in the ecosystem grid (row 19). */
+.brand{display:inline-flex;align-items:center;background:rgba(247,243,234,.94);
+  padding:.42rem .8rem;border-radius:12px;box-shadow:0 8px 24px -12px rgba(4,1,54,.45);
+  transition:background .4s,box-shadow .4s,padding .4s}
+.brand .logo-og{height:38px;width:auto;display:block;filter:none}
+header.nav.scrolled .brand{background:transparent;box-shadow:none;padding:.42rem 0}
+.foot-logo-og{height:44px;width:auto;background:rgba(247,243,234,.95);
+  padding:.5rem .85rem;border-radius:12px;box-sizing:content-box;margin-bottom:1.2rem}
+
+/* Parenting Dilemma — cream + subdued ("sad", not rich) */
+.problem-sec{background:linear-gradient(180deg,#f2ecdd 0%,#e9e1cd 100%);color:var(--ink)}
+.problem-sec::before,.problem-sec::after{opacity:.25}
+.problem-sec .eyebrow{color:#9a8f76}
+.problem-sec .big{color:#2e2b4a}
+.problem-sec .big em{color:#a38b5c;font-style:italic}
+.problem-sec .intro-sub{color:rgba(46,43,74,.62)}
+
+/* Everlearn (7th) card centered on desktop 3-col grid */
+@media(min-width:1041px){.jr-grid .jr:nth-child(7){grid-column:2}}
