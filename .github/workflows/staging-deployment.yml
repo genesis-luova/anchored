@@ -1,0 +1,15 @@
+name: Staging Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    uses: Thynker-Tech/devops/.github/workflows/deploy-frontend.yml@main
+    secrets: inherit
+    with:
+      aws_region: ${{ vars.AWS_REGION }}
+      s3_bucket_name: ${{ vars.S3_BUCKET_STAGING }}
+      env_vars: |
