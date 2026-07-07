@@ -256,6 +256,11 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
   transition:opacity .45s var(--ease-isb),filter .45s var(--ease-isb)}
 .anchor-step:hover .anchor-ic{opacity:1;
   filter:brightness(1.18) saturate(1.1) drop-shadow(0 0 8px rgba(232,200,120,.55))}
+/* Touch / narrow screens have no hover to trigger the brighten — show the gold
+   icons lit by default so mobile gets the same clear, highlighted look. */
+@media(hover:none),(max-width:700px){
+  .anchor-node img.anchor-ic{opacity:1;filter:brightness(1.06) saturate(1.05)}
+}
 @media(prefers-reduced-motion:reduce){.anchor-node img.anchor-ic{transition:none}}
 
 
@@ -266,7 +271,7 @@ body.achat-on .sticky-cta,body.achat-on .totop{opacity:0;pointer-events:none;tra
    cards keep their grid-era .jr styling; the rules below only neutralise the grid hover
    lift and the reveal clip-path so cards render correctly inside the moving track. */
 .bcar{position:relative;margin-top:clamp(2.2rem,4.5vw,3.2rem)}
-.bcar-viewport{overflow:hidden;padding:2.4rem 0 2.6rem}
+.bcar-viewport{overflow:hidden;padding:2.4rem 0 2.6rem;touch-action:pan-y}
 .bcar-track{display:flex;gap:clamp(1rem,2vw,1.6rem);will-change:transform;transition:transform .8s var(--ease-isb)}
 .bslide{flex:0 0 clamp(280px,29vw,358px);cursor:pointer;
   opacity:.38;transform:perspective(1250px) scale(.8);
